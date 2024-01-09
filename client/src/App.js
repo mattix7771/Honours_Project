@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
+import Product from './components/Product';
+import Sidebar from './components/Sidebar';
+
+import mockImage from './resources/toucan.png';  
 
 function App() {
 
@@ -32,6 +36,35 @@ function App() {
   return (
     <>
       <Navbar />
+      <Sidebar />
+      <div className='grid grid-cols-auto-fit-100'>
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        <Product image={mockImage} name='Product 1' price='1' rating='2' />
+        
+        
+      </div>
       <div className="container">
         <div className="rectangle">
           <input

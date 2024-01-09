@@ -3,10 +3,10 @@ import toucan from '../resources/toucan.png'; //Free image from freepik.com
 import settings from '../resources/settings.png'; //Free image from freepik.com
 import basket from '../resources/basket.png'; //Free image from freepik.com
 
-const Navbar = () => {
+function Navbar() {
   return (
     <nav className="flex bg-indigo-950 overflow-hidden">
-      <img src={toucan} alt="Logo" className='float-left align-middle p-2 m-2 w-36'/>
+      <img src={toucan} alt="Logo" className='float-left align-middle p-2 w-36'/>
       <input
         type="text"
         placeholder="Search item"
