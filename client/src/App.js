@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
+import Navbar from './components/Navbar';
 
 function App() {
 
@@ -29,20 +30,23 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <div className="rectangle">
-        <input
-          type="text"
-          value={userPrompt}
-          onChange={(e) => setUserPrompt(e.target.value)}
-        />
-        <button onClick={handleSubmit}>Submit</button>
-        <div>
-          <p>User: {userPrompt}</p>
-          <p>AI: {reply}</p>
+    <>
+      <Navbar />
+      <div className="container">
+        <div className="rectangle">
+          <input
+            type="text"
+            value={userPrompt}
+            onChange={(e) => setUserPrompt(e.target.value)}
+          />
+          <button onClick={handleSubmit}>Submit</button>
+          <div>
+            <p>User: {userPrompt}</p>
+            <p>AI: {reply}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
