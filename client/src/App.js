@@ -37,7 +37,7 @@ function App() {
     <>
       <Navbar />
       <Sidebar />
-      <div className='grid grid-cols-auto-fit-100'>
+      <div className='grid grid-cols-auto-fit-100 ml-96'>
         <Product image={mockImage} name='Product 1' price='1' rating='2' />
         <Product image={mockImage} name='Product 1' price='1' rating='2' />
         <Product image={mockImage} name='Product 1' price='1' rating='2' />
@@ -65,18 +65,17 @@ function App() {
         
         
       </div>
-      <div className="container">
-        <div className="rectangle">
-          <input
-            type="text"
-            value={userPrompt}
-            onChange={(e) => setUserPrompt(e.target.value)}
-          />
-          <button onClick={handleSubmit}>Submit</button>
-          <div>
-            <p>User: {userPrompt}</p>
-            <p>AI: {reply}</p>
-          </div>
+
+      <div className='fixed right-0 top-3/4 w-72 h-96 border-4 bg-gray-400'>
+        <input
+          type="text"
+          value={userPrompt}
+          onChange={(e) => setUserPrompt(e.target.value)}
+        />
+        <button onClick={handleSubmit}>Submit</button>
+        <div>
+          <p>User: {userPrompt}</p>
+          <p>AI: {reply}</p>
         </div>
       </div>
     </>
