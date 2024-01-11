@@ -4,9 +4,33 @@ import Navbar from './components/Navbar';
 import Product from './components/Product';
 import Sidebar from './components/Sidebar';
 
-import mockImage from './resources/toucan.png';  
+import mockImage from './resources/toucan.png';
+import jsontest from './run_results2.json';
 
 function App() {
+
+  const [products, setProducts] = useState([{}]);
+
+  // Get products from database
+  fetch('/products')
+  .then(res => {
+    // Check if the request was successful
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.status}`);
+    }
+    // Parse the JSON data in the response
+    return res.json();
+  })
+  .then(res => setProducts(res))
+  .catch(error => {
+    // Handle errors
+    console.error('Fetch error:', error);
+  });
+
+
+
+
+
 
   const [backendData, setBackendData] = useState([{}]);
   const [userPrompt, setUserPrompt] = useState('');
@@ -38,6 +62,15 @@ function App() {
       <Navbar />
       <Sidebar />
       <div className='grid grid-cols-auto-fit-100 ml-96'>
+        
+        {products.map((product, index) => (
+          <Product
+            key={index}
+            image={product.image}
+            name={product.title}
+            price={product.price}
+          />
+        ))}
         <Product image={mockImage} name='Product 1' price='1' rating='2' />
         <Product image={mockImage} name='Product 1' price='1' rating='2' />
         <Product image={mockImage} name='Product 1' price='1' rating='2' />
@@ -66,7 +99,7 @@ function App() {
         
       </div>
 
-      <div className='fixed right-0 top-3/4 w-72 h-96 border-4 bg-gray-400'>
+      <div className='fixed right-0 top-2/4 m-3 w-72 h-[340px] border-4 bg-gray-400 shadow-2xl shadow-black'>
         <input
           type="text"
           value={userPrompt}

@@ -3,7 +3,7 @@ import '../App.css';
 
 function Sidebar() {
   return (
-    <div className='fixed w-32 h-48 border-4'>
+    <div className=''>
       <input
         type="text"
         value={userPrompt}

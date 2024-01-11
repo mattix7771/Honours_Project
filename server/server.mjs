@@ -3,10 +3,17 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { LlamaModel, LlamaContext, LlamaChatSession } from 'node-llama-cpp';
+import { getPhones } from './database.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
+
+// Set up database
+app.get('/products', async (req, res) => {
+  const products = await getPhones();
+  res.send(products);
+});
 
 // Enable CORS for requests from localhost:3000
 const corsOptions = {
