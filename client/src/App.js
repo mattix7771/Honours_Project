@@ -5,27 +5,57 @@ import Product from './components/Product';
 import Sidebar from './components/Sidebar';
 
 import mockImage from './resources/toucan.png';
-import jsontest from './run_results2.json';
 
 function App() {
 
   const [products, setProducts] = useState([{}]);
+  const [dataFetched, setDataFetched] = useState(false);
 
   // Get products from database
-  fetch('/products')
-  .then(res => {
-    // Check if the request was successful
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.status}`);
+  if(!dataFetched){
+    fetch('/products')
+    .then(res => {
+      // Check if the request was successful
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      // Parse the JSON data in the response
+      return res.json();
+    })
+    .then(res => setProducts(res))
+    .then(() => setDataFetched(true))
+    .then(() => console.log("All products fetched"))
+    .catch(error => {
+      // Handle errors
+      console.error('Fetch error:', error);
+    });
+  }
+
+  // Update products when a new search is made
+  const runQuery = async (userSearch) => {
+    try {
+      const response = await fetch(`/products/${userSearch}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      console.log(data);
+      
+      setProducts(data);
+
+    } catch (error) {
+      console.error('Error:', error);
     }
-    // Parse the JSON data in the response
-    return res.json();
-  })
-  .then(res => setProducts(res))
-  .catch(error => {
-    // Handle errors
-    console.error('Fetch error:', error);
-  });
+  };
+
+
 
 
 
@@ -59,7 +89,7 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar runQuery={runQuery}/>
       <Sidebar />
       <div className='grid grid-cols-auto-fit-100 ml-96'>
         
