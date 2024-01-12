@@ -15,6 +15,7 @@ app.get('/products', async (req, res) => {
   res.send(products);
 });
 
+// Get products by title
 app.get('/products/:title', async (req, res) => {
   const title = req.params.title;
   console.log(title);

@@ -4,8 +4,6 @@ import Navbar from './components/Navbar';
 import Product from './components/Product';
 import Sidebar from './components/Sidebar';
 
-import mockImage from './resources/toucan.png';
-
 function App() {
 
   const [products, setProducts] = useState([{}]);
@@ -55,14 +53,7 @@ function App() {
     }
   };
 
-
-
-
-
-
-
-
-  const [backendData, setBackendData] = useState([{}]);
+  // Chatbot setup
   const [userPrompt, setUserPrompt] = useState('');
   const [reply, setReply] = useState('');
 
@@ -90,9 +81,10 @@ function App() {
   return (
     <>
       <Navbar runQuery={runQuery}/>
+
       <Sidebar />
+
       <div className='grid grid-cols-auto-fit-100 ml-96'>
-        
         {products.map((product, index) => (
           <Product
             key={index}
@@ -101,32 +93,6 @@ function App() {
             price={product.price}
           />
         ))}
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        <Product image={mockImage} name='Product 1' price='1' rating='2' />
-        
-        
       </div>
 
       <div className='fixed right-0 top-2/4 m-3 w-72 h-[340px] border-4 bg-gray-400 shadow-2xl shadow-black'>

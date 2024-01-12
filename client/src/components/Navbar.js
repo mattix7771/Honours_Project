@@ -7,21 +7,29 @@ function Navbar({runQuery}) {
 
   const [userSearch, setUserSearch] = useState('');
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (event) => {
+    event.preventDefault();
     runQuery(userSearch);
   }
 
   return (
     <nav className="flex bg-indigo-950 overflow-hidden">
       <img src={toucan} alt="Logo" className='float-left p-2 ml-4 w-28'/>
-      <input
-        type="text"
-        placeholder="Search products..."
-        value={userSearch}
-        onChange={(e) => setUserSearch(e.target.value)}
-        className="float-left bg-indigo-400 self-center p-4 my-4 ml-12 placeholder-slate-950 h-16 w-full rounded-l-md"
-      />
-      <button onClick={handleButtonClick} className="float-right self-center p-4 my-4 bg-indigo-400 text-slate-950 rounded-r-md h-16 w-28">Search</button>
+
+
+      <form onSubmit={handleButtonClick} className="inline-flex float-left bg-indigo-400 self-center p-4 pr-0 my-4 ml-12 placeholder-slate-950 h-16 w-full rounded-md">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={userSearch}
+          onChange={(e) => setUserSearch(e.target.value)}
+          
+        />
+        <button onClick={handleButtonClick} className="ml-auto self-center p-4 my-4 bg-indigo-400 text-slate-950 rounded h-16 w-28">Search</button>
+      </form>
+
+
+
       <img src={basket} alt="Logo" className='float-right self-center p-2 m-2 mx-2 w-16 h-full'/>
       <img src={settings} alt="Logo" className='float-right self-center p-2 m-2 mx-2 w-14 h-full'/>
     </nav>
