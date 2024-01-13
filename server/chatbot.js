@@ -1,8 +1,3 @@
-
-
-
-
-
 export function handleRequest(session, res, userPrompt){
   try {
     if (!userPrompt) {
@@ -13,7 +8,7 @@ export function handleRequest(session, res, userPrompt){
     const reply = session.prompt(userPrompt);
     console.log("AI: " + reply);
 
-    res.send(reply);
+    return reply;
   } catch (error) {
     console.error(error);
   }

@@ -27,6 +27,7 @@ app.get('/products/:title', async (req, res) => {
   res.send(products);
 });
 
+
 // Enable CORS for requests from localhost:3000
 const corsOptions = {
   origin: 'http://localhost:5000',
@@ -34,6 +35,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
 
 // Initialize the Llama Model
 const modelPath = path.join(__dirname, "models", "llama-2-7b-chat.Q5_K_M.gguf");
@@ -50,11 +52,12 @@ app.post('/chat', async (req, res) => {
 
 
   const reply = await handleRequest(session, res, userPrompt);
-  res.send(reply);
+  res.json({ reply });
 
 
 
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
