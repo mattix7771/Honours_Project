@@ -31,7 +31,7 @@ function Chatbot() {
 
 
   return (
-    <div className="max-w-md mx-auto my-8 p-6 bg-white rounded-md shadow-md">
+    <div className="">
       <input
         type="text"
         value={userPrompt}
