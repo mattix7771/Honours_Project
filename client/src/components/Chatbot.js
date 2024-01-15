@@ -70,7 +70,7 @@ const Chatbot = () => {
         botId: '852dcb24-51ce-44f1-b542-5a747a7b9155',
         hostUrl: 'https://cdn.botpress.cloud/webchat/v1',
         messagingUrl: 'https://messaging.botpress.cloud',
-        clientId: '<clientID>',
+        clientId: '852dcb24-51ce-44f1-b542-5a747a7b9155',
       })
     }
   }, [])
