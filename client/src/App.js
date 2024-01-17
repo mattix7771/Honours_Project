@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Basket from './pages/Basket';
 import Settings from './pages/Settings';
@@ -7,14 +7,13 @@ import Settings from './pages/Settings';
 function App() {
 
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/" element={<Home />}>
-        <Route path="basket" element={<Basket />} />
-        <Route path="settings" element={<Settings />} />
-        </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="/basket" element={<Basket />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
