@@ -3,7 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { LlamaModel, LlamaContext, LlamaChatSession } from 'node-llama-cpp';
-import { getAllProducts ,getAllPhones, getProductsByTitle } from './database.js';
+import { getAllProducts , getAllCategory, getProductsByTitle } from './database.js';
 import { handleRequest } from './chatbot.js';
 
 
@@ -20,13 +20,16 @@ app.get('/products', async (req, res) => {
 // Get products by title
 app.get('/products/:title', async (req, res) => {
   const title = req.params.title;
-  console.log(title);
   const products = await getProductsByTitle(title);
-  console.log(products);
-  res.header('Content-Type', 'application/json');
   res.send(products);
 });
 
+// Get all products by category
+app.get('/products/category/:category', async (req, res) => {
+  const category = req.params.category;
+  const products = await getAllCategory(category);
+  res.send(products);
+});
 
 // Enable CORS for requests from localhost:3000
 const corsOptions = {
@@ -45,17 +48,9 @@ const session = new LlamaChatSession({ context });
 
 // API endpoint to handle chat requests
 app.post('/chat', async (req, res) => {
-  
   const userPrompt = req.body.prompt;
-
-
-
-
   const reply = await handleRequest(session, res, userPrompt);
   res.json({ reply });
-
-
-
 });
 
 

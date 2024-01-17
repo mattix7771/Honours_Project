@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import ReactPaginate from 'react-paginate';
 import Navbar from '../components/Navbar';
 import Product from '../components/Product';
 import Sidebar from '../components/Sidebar';
@@ -8,8 +9,9 @@ function Home() {
 
   const [products, setProducts] = useState([{}]);
   const [dataFetched, setDataFetched] = useState(false);
+  const itemsPerPage = 20;
 
-  // Get products from database
+  // Load products from database
   if(!dataFetched){
     fetch('/products')
     .then(res => {
@@ -54,11 +56,42 @@ function Home() {
     }
   };
 
+  // Update products when a category is selected
+  const runCategoryQuery = async (category) => {
+
+    console.log("runCategoryQuery running")
+    console.log(category)
+    // try {
+    //   const response = await fetch(`/products/category/${category}`, {
+    //     method: 'GET',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //   });
+  
+    //   if (!response.ok) {
+    //     throw new Error('Network response was not ok');
+    //   }
+  
+    //   const data = await response.json();
+    //   console.log(data);
+      
+    //   setProducts(data);
+
+    // } catch (error) {
+    //   console.error('Error:', error);
+    // }
+  };
+
+  function paginateItems(itemsPerPage){
+    
+  }
+
   return (
     <>
       <Navbar runQuery={runQuery}/>
 
-      <Sidebar />
+      <Sidebar runCategoryQuery={runCategoryQuery}/>
 
       <div className='grid grid-cols-auto-fit-100 ml-96'>
         {products.map((product, index) => (
@@ -70,10 +103,6 @@ function Home() {
             image={product.image}
           />
         ))}
-      </div>
-
-      <div className='fixed right-0 top-2/4 m-3 mx-auto my-8 p-6 max-w-sm w-96 h-[340px] border-4 bg-white shadow-2xl rounded-md shadow-black'>
-        <Chatbot/>
       </div>
     </>
   );

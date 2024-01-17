@@ -31,13 +31,6 @@ export async function getAllProducts() {
     console.error(error);
   }
 }
-  
-// Get all phones
-export async function getAllPhones(){
-  const [res] = await pool.query('SELECT * FROM phones');
-  console.log(res);
-  return res;
-}
 
 // Get products by title
 export async function getProductsByTitle(title){
@@ -58,4 +51,16 @@ export async function getProductsByTitle(title){
   } catch (error) {
     console.error(error);
   }
+}
+
+// Get all products by category
+export async function getAllCategory(category){
+  category = category.split(',');
+  let products = [];
+  for (let cat of category) {
+    console.log(cat)
+    const [res] = await pool.query(`SELECT * FROM ${cat}`);
+    products.push(res);
+  }
+  return products;
 }
