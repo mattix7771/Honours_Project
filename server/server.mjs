@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -10,6 +11,7 @@ import { handleRequest } from './chatbot.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
+app.use(bodyParser.json());
 
 // Set up database routes
 app.get('/products', async (req, res) => {
@@ -29,6 +31,26 @@ app.get('/products/category/:category', async (req, res) => {
   const category = req.params.category;
   const products = await getAllCategory(category);
   res.send(products);
+});
+
+// Basket
+let basket = [];
+
+// Get basket items
+app.get('/getBasket', (req, res) => {
+  res.json({ basket });
+});
+
+// Add item to basket
+app.post('/addToBasket', (req, res) => {
+  let product = req.body;
+  if (!product || !product.name || !product.price || !product.image) {
+    return res.status(400).json({ success: false, message: 'Invalid product data' });
+  }
+  console.log(product);
+  basket.push(product);
+  console.log(basket);
+  res.json({ success: true, basket });
 });
 
 // Enable CORS for requests from localhost:3000
