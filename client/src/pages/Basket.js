@@ -6,7 +6,7 @@ function Basket() {
   const [products, setProducts] = useState([{}]);
 
   useEffect(() => {
-    fetch('/getBasket')
+    fetch('/basket/getBasket')
       .then((res) => res.json())
       .then((data) => {
         setProducts(data.basket);
@@ -18,7 +18,7 @@ function Basket() {
 
   function removeItem(name) {
     try {
-      fetch('/removeFromBasket', {
+      fetch('/basket/removeFromBasket', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

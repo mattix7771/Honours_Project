@@ -14,7 +14,7 @@ function ProductDetails() {
 
     function addToCart() {
       try {
-        fetch('/addToBasket', {
+        fetch('/basket/addToBasket', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -24,6 +24,10 @@ function ProductDetails() {
         .then((res) => {
           if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+          else{
+            const alert = document.getElementById('alert');
+            alert.classList.remove('hidden');
           }
           return res.json();
         })
@@ -36,12 +40,19 @@ function ProductDetails() {
       } catch (error) {
         console.error('Error:', error);
       }
+      
+      
     }
   
 
   return (
     <>
       <Navbar />
+
+      <div class="flex bg-blue-100 border m-4 w-96 justify-center align-middle border-blue-500 text-blue-700 px-4 py-3 hidden" role="alert" id='alert'>
+        <p class="font-bold">Product successfully added to cart!</p>
+      </div>
+
       <div className='inline-flex m-10 '>
         <img src={image} className='max-h-full min-h-[50vh]'/>
         <div className='mx-20 my-6'>
