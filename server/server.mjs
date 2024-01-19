@@ -4,63 +4,20 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { LlamaModel, LlamaContext, LlamaChatSession } from 'node-llama-cpp';
-import { getAllProducts , getAllCategory, getProductsByTitle } from './database.js';
 import { handleRequest } from './chatbot.js';
+import basketRoutes from './routes/basketRoutes.js';
+import productRoutes from './routes/productRoutes.js';
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const app = express();
 app.use(bodyParser.json());
 
-// Set up database routes
-app.get('/products', async (req, res) => {
-  const products = await getAllProducts();
-  res.send(products);
-});
+// Set up product routes
+app.use('/products', productRoutes);
 
-// Get products by title
-app.get('/products/:title', async (req, res) => {
-  const title = req.params.title;
-  const products = await getProductsByTitle(title);
-  res.send(products);
-});
-
-// Get all products by category
-app.get('/products/category/:category', async (req, res) => {
-  const category = req.params.category;
-  const products = await getAllCategory(category);
-  res.send(products);
-});
-
-// Basket
-let basket = [];
-
-// Get basket items
-app.get('/getBasket', (req, res) => {
-  res.json({ basket });
-});
-
-// Add item to basket
-app.post('/addToBasket', (req, res) => {
-  let product = req.body;
-  if (!product || !product.name || !product.price || !product.image) {
-    return res.status(400).json({ success: false, message: 'Invalid product data' });
-  }
-  basket.push(product);
-  res.json({ success: true, basket });
-});
-
-// Remove item from basket
-app.post('/removeFromBasket', (req, res) => {
-  let product = req.body;
-  if (!product) {
-    return res.status(400).json({ success: false, message: 'Invalid product data' });
-  }
-  basket = basket.filter((item) => item.name !== product.name);
-  console.log(basket);
-  res.json({ success: true, basket });
-});
+// Set up basket routes
+app.use('/basket', basketRoutes);
 
 // Enable CORS for requests from localhost:3000
 const corsOptions = {
