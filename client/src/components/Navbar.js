@@ -15,8 +15,9 @@ function Navbar({runQuery}) {
 
   return (
     <nav className="flex bg-indigo-950 overflow-hidden">
-      <img src={toucan} alt="Logo" className='float-left p-2 ml-4 w-28'/>
-
+      <Link to='/'>
+        <img src={toucan} alt="Logo" className='float-left p-2 ml-4 w-28'/>
+      </Link>
 
       <form onSubmit={handleButtonClick} className="inline-flex float-left bg-indigo-400 self-center p-4 pr-0 my-4 ml-12 placeholder-slate-950 h-16 w-full rounded-md">
         <input
