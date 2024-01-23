@@ -152,6 +152,8 @@ function Home() {
         />
         <ArrowLeftIcon className='h-4 w-4 border-4' /> */}
 
+        <Chatbot />
+
     </>
   );
 }
