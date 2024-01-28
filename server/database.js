@@ -64,3 +64,14 @@ export async function getAllCategory(category){
   }
   return products;
 }
+
+// Get cheapest phone
+export async function getSpecificProduct(productType, productFilter, direction){
+  try {
+    const [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction} LIMIT 1`);
+    return Object.values(res).flat();
+
+  } catch (error) {
+    console.error(error);
+  }
+}
