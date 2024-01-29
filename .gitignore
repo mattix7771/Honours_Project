@@ -2,3 +2,8 @@ node_modules/
 *.json
 *env
 *.gguf
+*.exe
+
+botpress-bot/bin
+botpress-bot/bindings
+botpress-bot/modules

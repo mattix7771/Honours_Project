@@ -69,7 +69,7 @@ export async function getAllCategory(category){
 export async function getSpecificProduct(productType, productFilter, direction){
   try {
     const [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction} LIMIT 1`);
-    return Object.values(res).flat();
+    return res[0];
 
   } catch (error) {
     console.error(error);
