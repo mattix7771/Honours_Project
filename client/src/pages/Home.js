@@ -79,16 +79,39 @@ function Home() {
     // }
   };
 
+  const logAction = async (message) => {
+    try {
+      const response = await fetch('/log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ log: message }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      console.log('Log successfully sent.');
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+  
+
   const displayProducts = products
   .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
   .map((product, index) => (
-    <Product
-      key={index}
-      name={product.title}
-      price={product.price}
-      rating={product.rating}
-      image={product.image}
-    />
+    <div onClick={() => logAction(`product clicked: ${product.title}`)}>
+      <Product
+        key={index}
+        name={product.title}
+        price={product.price}
+        rating={product.rating}
+        image={product.image}
+      />
+    </div>
   ));
 
   function paginateItems(itemsPerPage){

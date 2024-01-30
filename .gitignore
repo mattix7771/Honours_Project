@@ -3,6 +3,7 @@ node_modules/
 *env
 *.gguf
 *.exe
+*.csv
 
 botpress-bot/bin
 botpress-bot/bindings

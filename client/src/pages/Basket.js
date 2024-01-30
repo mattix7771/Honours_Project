@@ -16,7 +16,7 @@ function Basket() {
       });
   }, []);
 
-  function removeItem(name) {
+  async function removeItem(name) {
     try {
       fetch('/basket/removeFromBasket', {
         method: 'POST',
@@ -39,6 +39,27 @@ function Basket() {
     } catch (error) {
       console.error('Error:', error);
     }
+
+    // Log action
+    try {
+      const response = await fetch('/log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ log: `product removed from basket: ${name}` }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      console.log('Log successfully sent.');
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+
+    // Reload page
     window.location.reload();
   }
 

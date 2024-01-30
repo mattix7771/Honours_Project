@@ -4,18 +4,46 @@ import toucan from '../resources/toucan.png'; //Free image from freepik.com
 import settings from '../resources/settings.png'; //Free image from freepik.com
 import basket from '../resources/basket.png'; //Free image from freepik.com
 
+/**
+ * Navbar component
+ *
+ * @param {runQuery} returns query parameters to Home.js to update products according to parameters
+ */
 function Navbar({runQuery}) {
 
   const [userSearch, setUserSearch] = useState('');
 
+  // Send quert to Home.js
   const handleButtonClick = (event) => {
     event.preventDefault();
     runQuery(userSearch);
   }
 
+  // Log action
+  const logAction = async (message) => {
+    try {
+      const response = await fetch('/log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ log: message }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      console.log('Log successfully sent.');
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  };
+  
+
   return (
     <nav className="flex bg-indigo-950 overflow-hidden">
-      <Link to='/'>
+      <Link to='/' onClick={() => logAction('Clicked home')}>
         <img src={toucan} alt="Logo" className='float-left p-2 ml-4 w-28'/>
       </Link>
 
@@ -31,7 +59,7 @@ function Navbar({runQuery}) {
       </form>
 
       <Link to='/basket' className='float-right self-center p-2 m-2 mx-2 w-24 h-full'>
-        <button>
+        <button onClick={() => logAction('Basket opened')}>
           <img src={basket}/>
         </button>
       </Link>

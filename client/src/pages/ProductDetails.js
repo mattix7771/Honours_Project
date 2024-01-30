@@ -12,7 +12,8 @@ function ProductDetails() {
     console.log(productInfo);
     console.log(JSON.stringify({ name: name, price: price, image: image }));
 
-    function addToCart() {
+    async function addToCart() {
+      // Add to cart through basket API
       try {
         fetch('/basket/addToBasket', {
           method: 'POST',
@@ -39,6 +40,25 @@ function ProductDetails() {
           });
       } catch (error) {
         console.error('Error:', error);
+      }
+
+      // Log action
+      try {
+        const response = await fetch('/log', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ log: `product added to basket: ${title}` }),
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        console.log('Log successfully sent.');
+      } catch (error) {
+        console.error('Error:', error.message);
       }
       
       
