@@ -20,13 +20,13 @@ function Sidebar({runCategoryQuery}) {
     <div className='absolute left-0 w-64 h-full border-r-4 border-b-4 border-gray-400'>
       <div>
         <a>Catergories</a><br/>
-        <label for="phonesCheck">
+        <label htmlFor="phonesCheck">
             <input type="checkbox" id="phoneCheck" name="category" value="phones_backlog"/>
           Phones
         </label>
         <br/>
 
-        <label for="tvsCheck">
+        <label htmlFor="tvsCheck">
           <input type="checkbox" id="tvsCheck" name="category" value="tvs_backlog"/>
           TVs
         </label>

@@ -103,9 +103,8 @@ function Home() {
   const displayProducts = products
   .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
   .map((product, index) => (
-    <div onClick={() => logAction(`product clicked: ${product.title}`)}>
+    <div key={index} onClick={() => logAction(`product clicked: ${product.title}`)}>
       <Product
-        key={index}
         name={product.title}
         price={product.price}
         rating={product.rating}
