@@ -10,7 +10,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const logDir = '../session_logs.csv';
-const sessionStart = new Date();
+const sessionStart = new Date().toLocaleString();
 
 // Enable CORS for requests from localhost:3000
 const corsOptions = {
@@ -21,8 +21,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Set up session logs
-fs.writeFile(logDir, 'Time, Elapsed time, Action', err => {if(err) {console.error(err)}} );
-fs.appendFile(logDir, '\r\n' + `${sessionStart},0,session started`, err => {if(err) {console.error(err)}});
+fs.writeFile(logDir, 'Time, Elapsed time, Action Code, Action', err => {if(err) {console.error(err)}} );
+fs.appendFile(logDir, '\r\n' + `${sessionStart},0s,0,session started`, err => {if(err) {console.error(err)}});
 // fs.access(logDir, fs.constants.F_OK, err => {
 //   if (err) {
 //     fs.writeFile(logDir, 'Time, Elapsed time, Action', err => console.error(err) );
@@ -31,9 +31,10 @@ fs.appendFile(logDir, '\r\n' + `${sessionStart},0,session started`, err => {if(e
 // });
 
 app.post('/log', async (req, res) => {
-  const actionTIme = new Date();
+  const actionTIme = new Date().toLocaleString();
   const log = req.body.log;
-  fs.appendFile(logDir, '\r\n' + `${actionTIme},${(actionTIme-sessionStart)/1000}s,${log}`, err => {if(err) {console.error(err)}});
+  const actionCode = req.body.code;
+  fs.appendFile(logDir, '\r\n' + `${actionTIme},${(actionTIme-sessionStart)/1000}s,${actionCode},${log}`, err => {if(err) {console.error(err)}});
   res.sendStatus(200);
 });
 
