@@ -18,12 +18,30 @@
     }
 
     const response = await axios(config)
-    const productDetails = response.data
+    const data = response.data
 
-    temp.titlePayload = productDetails.title
-    temp.pricePayload = productDetails.price
-    temp.ratingPayload = productDetails.rating
-    temp.imagePayload = productDetails.image
+    const products = []
+
+    data.forEach(product => {
+      const item = {
+        titlePayload: product.name,
+        pricePayload: product.price,
+        ratingPayload: product.rating,
+        imagePayload: product.image,
+        featuresPayload: product.features
+      }
+      products.push(item)
+    })
+    console.log(products)
+    const carouselItems = products.map(product => ({
+      title: product.titlePayload.slice(0, 2),
+      subtitle: product.pricePayload,
+      image: product.imagePayload
+    }))
+
+    bp.cms.renderElement('builtin_carousel', { items: carouselItems }, event).then(payloads => {
+      bp.events.replyToEvent(event, payloads)
+    })
   }
 
   return myAction(args.productType, args.productFilter)
