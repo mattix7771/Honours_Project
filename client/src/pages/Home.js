@@ -7,15 +7,21 @@ import Product from '../components/Product';
 import Sidebar from '../components/Sidebar';
 import Chatbot from '../components/Chatbot';
 import DigitalDevices from '../resources/digital devices.jpg'; //Free image from freepik.com
+import { resolvePath } from 'react-router-dom';
 
 function Home() {
 
   const [products, setProducts] = useState([{}]);
+
+  const [phones, setPhones] = useState([{}]);
+  const [tvs, setTvs] = useState([{}]);
+  const [headphones, setHeadphones] = useState([{}]);
+
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 24;
   const pageCount = Math.ceil(products.length / itemsPerPage);
 
-  // Load products from database
+  //Load products from database
   useEffect(() => {
     fetch('/products')
       .then(res => {
@@ -28,6 +34,46 @@ function Home() {
       .then(() => console.log(products))
       .catch((error) => console.error('Fetch error:', error));
   }, []);
+
+
+  useEffect(() => {
+    try{
+      fetch('/products/category/phones_backlog').then(res => res.json()).then(res => setPhones(res));
+      fetch('/products/category/tvs_backlog').then(res => res.json()).then(res => setTvs(res));
+      fetch('/products/category/headphones_backlog').then(res => res.json()).then(res => setHeadphones(res));
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  }, []);
+
+ 
+
+  // useEffect(() => {
+  //   const getProductsByCategory = async (category) => {
+  //     try {
+  //       const response = await fetch(`/products/category/${category}`, {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       });
+    
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+    
+  //       const responseData = await response.json();
+  //       console.log("RESPONSE", responseData);
+    
+  //     } catch (error) {
+  //       console.error('Error:', error);
+  //     }
+  //   };
+
+  //   getProductsByCategory(category);
+  // }, []);
+  
+  
 
   // Update products when a new search is made
   const runQuery = async (userSearch) => {
@@ -103,19 +149,19 @@ function Home() {
   };
   
 
-  const displayProducts = products
-  .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
-  .map((product, index) => (
-    <div key={index} onClick={() => logAction(`product clicked: ${product.title}`, 2 )}>
-      <Product
-        name={product.name}
-        price={product.price}
-        rating={product.rating}
-        image={product.image}
-      />
-    </div>
-  ));
-  console.log(products[0])
+  const displayProducts = (products) => products
+    .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+    .map((product, index) => (
+      <div key={index} onClick={() => logAction(`product clicked: ${product.title}`, 2 )}>
+        <Product
+          name={product.name}
+          price={product.price}
+          rating={product.rating}
+          image={product.image}
+        />
+      </div>
+    ));
+
 
   function paginateItems(itemsPerPage){
     setCurrentPage(itemsPerPage.selected);
@@ -124,8 +170,10 @@ function Home() {
   return (
     <div>
       
+      {/* Navbar */}
       <Navbar runQuery={runQuery}/>
 
+      {/* Banner */}
       <div className='flex bg-[#caf2ff] h-full w-[calc(100%-160px)] m-20 rounded-3xl px-20'>
         <div className="text-6xl min-w-fit font-serif font-semibold text-gray-800 leading-relaxed pt-32">Tech Made Simple,<br/>Shopping Made Fun.
           <div className='text-2xl pt-36 float-right'>Shop our best sellers here<br/>
@@ -135,13 +183,26 @@ function Home() {
         <img src={DigitalDevices} className='ml-auto'/>
       </div>
 
-      <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Our Products</div>
+      <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Phones</div>
+      <div className='grid grid-cols-6 ml-96'>
+        {displayProducts(phones.slice(0, 4))}
+      </div>
       
+      
+      <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Tvs</div>
+      <div className='grid grid-cols-6 ml-96'>
+        {displayProducts(tvs.slice(0, 4))}
+      </div>
+      <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Headphones</div>
+      <div className='grid grid-cols-6 ml-96'>
+        {displayProducts(headphones.slice(0, 4))}
+      </div>
+      <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Our Products</div>
 
       <Sidebar runCategoryQuery={runCategoryQuery}/>
 
       <div className='grid grid-cols-auto-fit-100 ml-96'>
-        {displayProducts}
+        {displayProducts(products)}
       </div>
       
       <div className="flex gap-4 my-4 ml-96 p-4 justify-center bg-blue-100 rounded-xl">
