@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import Product from '../components/Product';
 import Sidebar from '../components/Sidebar';
 import Chatbot from '../components/Chatbot';
+import DigitalDevices from '../resources/digital devices.jpg'; //Free image from freepik.com
 
 function Home() {
 
@@ -79,14 +80,14 @@ function Home() {
     // }
   };
 
-  const logAction = async (message) => {
+  const logAction = async (message, code) => {
     try {
       const response = await fetch('/log', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ log: message }),
+        body: JSON.stringify({ log: message, code: code }),
       });
   
       if (!response.ok) {
@@ -97,29 +98,45 @@ function Home() {
     } catch (error) {
       console.error('Error:', error.message);
     }
+
+    
   };
   
 
   const displayProducts = products
   .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
   .map((product, index) => (
-    <div key={index} onClick={() => logAction(`product clicked: ${product.title}`)}>
+    <div key={index} onClick={() => logAction(`product clicked: ${product.title}`, 2 )}>
       <Product
-        name={product.title}
+        name={product.name}
         price={product.price}
         rating={product.rating}
         image={product.image}
       />
     </div>
   ));
+  console.log(products[0])
 
   function paginateItems(itemsPerPage){
     setCurrentPage(itemsPerPage.selected);
   }
 
   return (
-    <>
+    <div>
+      
       <Navbar runQuery={runQuery}/>
+
+      <div className='flex bg-[#caf2ff] h-full w-[calc(100%-160px)] m-20 rounded-3xl px-20'>
+        <div className="text-6xl min-w-fit font-serif font-semibold text-gray-800 leading-relaxed pt-32">Tech Made Simple,<br/>Shopping Made Fun.
+          <div className='text-2xl pt-36 float-right'>Shop our best sellers here<br/>
+            <button className='bg-[#9ce6ff] ml-[50%]' onClick={() => {window.scrollTo({top: 10000, behavior: "smooth"})}}>View</button>
+          </div>
+        </div>
+        <img src={DigitalDevices} className='ml-auto'/>
+      </div>
+
+      <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Our Products</div>
+      
 
       <Sidebar runCategoryQuery={runCategoryQuery}/>
 
@@ -176,7 +193,7 @@ function Home() {
 
         <Chatbot />
 
-    </>
+    </div>
   );
 }
 
