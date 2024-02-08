@@ -10,9 +10,10 @@ function Product(props) {
     return (
       <div className='w-64 h-80 m-4 mb-14'>
         
-        <Link 
+        <Link
           to={`/product_details/${props.name}`}
           state = {{
+            title: props.name.split(' ').slice(0, 1).join(' '),
             name: props.name,
             price: props.price,
             image: props.image,
@@ -26,8 +27,8 @@ function Product(props) {
 
 
         <div className='px-5 py-2'>
-          <a className='font-bold'>{props.name.split(' ').slice(0, 3).join(' ')}</a><br/>
-          <a>{props.name.split(' ').slice(4, 10).join(' ')}</a><br/>
+          <a className='font-bold'>{props.name.split(' ').slice(0, 1).join(' ')}</a><br/>
+          <a>{props.name.split(' ').slice(2, 8).join(' ')}</a><br/>
           <a>{props.price}</a><br/>
           <a>
             {Array(starCount).fill().map((_, index) => (
