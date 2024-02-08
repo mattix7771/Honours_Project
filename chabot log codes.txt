@@ -1,0 +1,20 @@
+Code 0 - session start
+Code 1 - opened starting page
+Code 2 - opened product page
+Code 3 - added product to basket
+Code 4 - removed product from basket
+Code 5 - 
+Code 6 - 
+Code 7 - 
+Code 8 - 
+Code 9 - 
+Code 10 - opened chatbot
+Code 11 - closed chatbot
+Code 12 - picked chatbot message option
+Code 13 - sent message to chatbot
+Code 14 - received chatbot product reccomendation
+Code 15 - started LLM chatbot conversation
+Code 16 - 
+Code 17 - 
+Code 18 - 
+Code 19 - 
