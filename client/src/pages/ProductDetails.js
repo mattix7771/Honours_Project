@@ -4,65 +4,67 @@ import Navbar from '../components/Navbar';
 
 function ProductDetails() {
   
-    const location = useLocation();
-    const { id } = useParams();
-    const { title, name, price, image, rating } = location.state;
+  const location = useLocation();
+  const { id } = useParams();
+  const { title, name, price, image, rating } = location.state;
 
-    let productInfo = JSON.stringify({ name, price, image });
-    console.log(productInfo);
-    console.log(JSON.stringify({ name: name, price: price, image: image }));
+  let productInfo = JSON.stringify({ name, price, image });
+  console.log(productInfo);
+  console.log(JSON.stringify({ name: name, price: price, image: image }));
 
-    async function addToCart() {
-      // Add to cart through basket API
-      try {
-        fetch('/basket/addToBasket', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name, price, image }),
-        })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! Status: ${res.status}`);
-          }
-          else{
-            const alert = document.getElementById('alert');
-            alert.classList.remove('hidden');
-          }
-          return res.json();
-        })
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      } catch (error) {
-        console.error('Error:', error);
-      }
-
-      // Log action
-      try {
-        const response = await fetch('/log', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ log: `product added to basket: ${title}` }),
-        });
-    
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+  async function addToCart() {
+    // Add to cart through basket API
+    try {
+      fetch('/basket/addToBasket', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, price, image }),
+      })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
         }
-    
-        console.log('Log successfully sent.');
-      } catch (error) {
-        console.error('Error:', error.message);
-      }
-      
-      
+        else{
+          const alert = document.getElementById('alert');
+          alert.classList.remove('hidden');
+        }
+        return res.json();
+      })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } catch (error) {
+      console.error('Error:', error);
     }
+  }
+
+  const logAction = async (message, code) => {
+    // Log action
+    try {
+      const response = await fetch('/log', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ log: `product added to basket: ${title}` }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      console.log('Log successfully sent.');
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
+  }
+  
+
   
 
   return (

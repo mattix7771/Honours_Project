@@ -20,14 +20,14 @@ function Navbar({runQuery}) {
   }
 
   // Log action
-  const logAction = async (message) => {
+  const logAction = async (message, code) => {
     try {
       const response = await fetch('/log', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ log: message }),
+        body: JSON.stringify({ log: message, code: code}),
       });
   
       if (!response.ok) {
@@ -59,7 +59,7 @@ function Navbar({runQuery}) {
       </form>
 
       <Link to='/basket' className='float-right self-center p-2 m-2 mx-2 w-24 h-full'>
-        <button onClick={() => logAction('Basket opened')}>
+        <button onClick={() => logAction('Basket opened', 5)}>
           <img src={basket}/>
         </button>
       </Link>

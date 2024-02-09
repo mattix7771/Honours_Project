@@ -49,8 +49,8 @@ function Chatbot() {
         <p className="text-gray-600">User: {userPrompt}</p>
         <p className="text-gray-800">AI: {reply}</p>
       </div>
-      <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
-      <script src="https://mediafiles.botpress.cloud/852dcb24-51ce-44f1-b542-5a747a7b9155/webchat/config.js" defer></script>
+      {/* <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+      <script src="https://mediafiles.botpress.cloud/852dcb24-51ce-44f1-b542-5a747a7b9155/webchat/config.js" defer></script> */}
     </div>
   );
 };

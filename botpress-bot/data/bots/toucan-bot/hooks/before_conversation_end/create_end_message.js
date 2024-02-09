@@ -1,1 +1,1 @@
- event.state.temp.endMessage = 'I will be listening'
+  event.state.temp.endMessage = "Let me know if there's anything else I can help with"

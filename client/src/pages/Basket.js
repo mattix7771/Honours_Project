@@ -40,6 +40,11 @@ function Basket() {
       console.error('Error:', error);
     }
 
+    // Reload page
+    window.location.reload();
+  }
+
+  const logAction = async (message, code) => {
     // Log action
     try {
       const response = await fetch('/log', {
@@ -47,20 +52,17 @@ function Basket() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ log: `product removed from basket: ${name}` }),
+        body: JSON.stringify({ log: message, code: code }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
+
       console.log('Log successfully sent.');
     } catch (error) {
       console.error('Error:', error.message);
     }
-
-    // Reload page
-    window.location.reload();
   }
 
   return (
@@ -73,7 +75,13 @@ function Basket() {
               <img src={product.image} className='max-h-[160px] min-h-[160px]'/>
               <a>{product.name}</a><br/>
               <a>{product.price}</a><br/>
-              <button className='bg-blue-300 w-40 h-20 font-bold text-lg' onClick={() => {removeItem(product.name)}}>Remove item</button>
+              <button 
+                className='bg-blue-300 w-40 h-20 font-bold text-lg' 
+                onClick={() => {
+                  removeItem(product.name)
+                  logAction(`product removed from basket: ${product.name}`, 4)}}>
+                  Remove item
+              </button>
             </div>
           ))}
           

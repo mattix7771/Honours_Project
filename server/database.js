@@ -41,7 +41,7 @@ export async function getProductsByTitle(title){
     const allData = {};
 
     for (const table of tables) {
-      const [res] = await pool.query(`SELECT * FROM ${table} WHERE title LIKE ?`, [`%${title}%`]);
+      const [res] = await pool.query(`SELECT * FROM ${table} WHERE name LIKE ?`, [`%${title}%`]);
       allData[table] = res;
     }
     const allProducts = Object.values(allData).flat();
@@ -54,7 +54,7 @@ export async function getProductsByTitle(title){
 }
 
 // Get all products by category
-export async function getAllCategory(category){
+export async function getAll(category){
   category = category.split(',');
   let products = [];
   for (let cat of category) {
@@ -65,11 +65,18 @@ export async function getAllCategory(category){
   return products;
 }
 
+// Get all products by category
+export async function getAllFromTable(category){
+  const [res] = await pool.query(`SELECT * FROM ${category}`);
+  return res;
+}
+
 // Get cheapest phone
-export async function getSpecificProduct(productType, productFilter, direction){
+export async function getSpecificProduct(productType, productFilter, direction, limit = 5){
   try {
-    const [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction} LIMIT 1`);
-    return res[0];
+    const [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction} LIMIT ${limit}`);
+    console.log(res);
+    return res;
 
   } catch (error) {
     console.error(error);

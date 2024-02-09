@@ -6,14 +6,14 @@ const Chatbot = () => {
   const [chatbotLoaded, setChatbotLoaded] = useState(false);
 
   // Log action
-  const logAction = async (message) => {
+  const logAction = async (message, code) => {
     try {
       const response = await fetch('/log', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ log: message }),
+        body: JSON.stringify({ log: message, code: code }),
       });
   
       if (!response.ok) {
@@ -27,19 +27,25 @@ const Chatbot = () => {
   };
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "http://localhost:3001/assets/modules/channel-web/inject.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      window.botpressWebChat.init({
-        host: "http://localhost:3001",
-        botId: "toucan-bot"
-      });
+    
+    const existingChatbotButton = document.querySelector('.bpw-widget-btn');
+    
+    if(!existingChatbotButton && !chatbotLoaded){
+      console.log('SHIT');
+      const script = document.createElement('script');
+      script.src = "http://localhost:3001/assets/modules/channel-web/inject.js";
+      script.async = true;
+      document.body.appendChild(script);
+  
+      script.onload = () => {
+        window.botpressWebChat.init({
+          host: "http://localhost:3001",
+          botId: "toucan-bot"
+        });
+      }
+      setChatbotLoaded(true);
     }
-    setChatbotLoaded(true);
-  }, []);
+  }, [chatbotLoaded]);
 
 
   useEffect(() => {
@@ -48,9 +54,9 @@ const Chatbot = () => {
       window.addEventListener("message", function(event) {
         console.log(event.data.name);
         if (event.data.name === "webchatOpened") {
-          logAction("Chatbot opened");
+          logAction("Chatbot opened", 10);
         } else if (event.data.name === "webchatClosed") {
-          logAction("Chatbot closed");
+          logAction("Chatbot closed", 11);
         }
       })
     }

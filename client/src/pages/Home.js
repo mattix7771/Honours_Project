@@ -2,12 +2,12 @@ import React, {useEffect, useState} from 'react';
 import ReactPaginate from 'react-paginate';
 import { Button, IconButton } from '@material-tailwind/react';
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import DigitalDevices from '../resources/digital devices.jpg'; //Free image from freepik.com
 import Navbar from '../components/Navbar';
 import Product from '../components/Product';
 import Sidebar from '../components/Sidebar';
 import Chatbot from '../components/Chatbot';
-import DigitalDevices from '../resources/digital devices.jpg'; //Free image from freepik.com
-import { resolvePath } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 function Home() {
 
@@ -16,6 +16,8 @@ function Home() {
   const [phones, setPhones] = useState([{}]);
   const [tvs, setTvs] = useState([{}]);
   const [headphones, setHeadphones] = useState([{}]);
+  const [laptops, setLaptops] = useState([{}]);
+  const [watches, setWatches] = useState([{}]);
 
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 24;
@@ -41,6 +43,8 @@ function Home() {
       fetch('/products/category/phones_backlog').then(res => res.json()).then(res => setPhones(res));
       fetch('/products/category/tvs_backlog').then(res => res.json()).then(res => setTvs(res));
       fetch('/products/category/headphones_backlog').then(res => res.json()).then(res => setHeadphones(res));
+      fetch('/products/category/laptops_backlog').then(res => res.json()).then(res => setLaptops(res));
+      fetch('/products/category/watches_backlog').then(res => res.json()).then(res => setWatches(res));
     } catch (error) {
       console.error('Fetch error:', error);
     }
@@ -177,7 +181,7 @@ function Home() {
       <div className='flex bg-[#caf2ff] h-full w-[calc(100%-160px)] m-20 rounded-3xl px-20'>
         <div className="text-6xl min-w-fit font-serif font-semibold text-gray-800 leading-relaxed pt-32">Tech Made Simple,<br/>Shopping Made Fun.
           <div className='text-2xl pt-36 float-right'>Shop our best sellers here<br/>
-            <button className='bg-[#9ce6ff] ml-[50%]' onClick={() => {window.scrollTo({top: 10000, behavior: "smooth"})}}>View</button>
+            <button className='bg-[#9ce6ff] ml-[50%]' onClick={() => {window.scrollTo({top: 1000, behavior: "smooth"})}}>View</button>
           </div>
         </div>
         <img src={DigitalDevices} className='ml-auto'/>
@@ -188,15 +192,26 @@ function Home() {
         {displayProducts(phones.slice(0, 4))}
       </div>
       
-      
       <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Tvs</div>
       <div className='grid grid-cols-6 ml-96'>
         {displayProducts(tvs.slice(0, 4))}
       </div>
+
       <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Headphones</div>
       <div className='grid grid-cols-6 ml-96'>
         {displayProducts(headphones.slice(0, 4))}
       </div>
+
+      <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Laptops</div>
+      <div className='grid grid-cols-6 ml-96'>
+        {displayProducts(laptops.slice(0, 4))}
+      </div>
+
+      <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Watches</div>
+      <div className='grid grid-cols-6 ml-96'>
+        {displayProducts(watches.slice(0, 4))}
+      </div>
+
       <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>Our Products</div>
 
       <Sidebar runCategoryQuery={runCategoryQuery}/>
@@ -253,7 +268,7 @@ function Home() {
         <ArrowLeftIcon className='h-4 w-4 border-4' /> */}
 
         <Chatbot />
-
+        <Footer />
     </div>
   );
 }
