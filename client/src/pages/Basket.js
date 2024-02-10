@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
+import { logAction } from '../util/util';
 
 function Basket() {
 
@@ -42,27 +43,6 @@ function Basket() {
 
     // Reload page
     window.location.reload();
-  }
-
-  const logAction = async (message, code) => {
-    // Log action
-    try {
-      const response = await fetch('/log', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ log: message, code: code }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      console.log('Log successfully sent.');
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
   }
 
   return (

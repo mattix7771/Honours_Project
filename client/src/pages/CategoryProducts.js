@@ -5,6 +5,7 @@ import Product from '../components/Product';
 import ReactPaginate from 'react-paginate';
 import { Button, IconButton } from '@material-tailwind/react';
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { logAction } from '../util/util';
 
 function CategoryProducts() {
   
@@ -33,6 +34,10 @@ function CategoryProducts() {
 		console.log('Products:', products);
 	}, [products]);
 
+  useEffect(() => {
+    logAction(`opened ${category} product category`, 6);
+  }, []);
+
 	const displayProducts = () => products
   .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
 	.map((product, index) => (
@@ -53,13 +58,16 @@ function CategoryProducts() {
   return (
     <>
       <Navbar />
-        <div className="flex justify-center items-center">
-            <h1 className="text-6xl font-bold text-indigo-950">Category: {category}</h1>
-        </div>
+      <div className="flex justify-center items-center">
+          <h1 className="text-6xl font-bold text-indigo-950">Category: {category}</h1>
+      </div>
 
-				<div className='grid grid-cols-auto-fit-100'>
-        	{displayProducts()}
-      	</div>
+      
+
+
+      <div className='grid grid-cols-auto-fit-100'>
+        {displayProducts()}
+      </div>
       
       <div className="flex gap-4 my-4 mx-96 p-4 justify-center bg-blue-100 rounded-xl">
         <Button
@@ -94,7 +102,7 @@ function CategoryProducts() {
         </Button>
       </div>
 
-      <ReactPaginate
+      {/* <ReactPaginate
           previousLabel={<ArrowLeftIcon className='h-4 w-4'/> + 'Previous'}
           nextLabel={'Next →'}
           pageCount={Math.ceil(products.length / itemsPerPage)}
@@ -106,7 +114,7 @@ function CategoryProducts() {
           activeClassName={'pagination__link--active'}
           className='flex justify-center'
         />
-        <ArrowLeftIcon className='h-4 w-4 border-4' />
+        <ArrowLeftIcon className='h-4 w-4 border-4' /> */}
       
     </>
   );

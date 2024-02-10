@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import Product from '../components/Product';
 import Chatbot from '../components/Chatbot';
 import Footer from '../components/Footer';
+import { logAction } from '../util/util';
 
 /** 
  * Home component
@@ -37,10 +38,6 @@ function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log('Products:', products);
-  }, [products]);
-
   // Update products when a new search is made
   const runQuery = async (userSearch) => {
     try {
@@ -65,32 +62,16 @@ function Home() {
     }
   };
 
-  // Log action
-  const logAction = async (message, code) => {
-    try {
-      const response = await fetch('/log', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ log: message, code: code }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      console.log('Log successfully sent.');
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
-  };
+  // Log starting page action
+  useEffect(() => {
+    logAction('Opened starting page', 1);
+  }, []);
   
 
   // Display products
   const displayProducts = (products) => products
   .map((product, index) => (
-    <div key={index} onClick={() => logAction(`product clicked: ${product.title}`, 2 )}>
+    <div key={index} onClick={() => logAction(`product clicked: ${product.name}`, 2 )}>
       <Product
         name={product.name}
         price={product.price}
@@ -134,7 +115,7 @@ function Home() {
         
       {/* Footer */}
       <Footer />
-      
+
     </div>
   );
 }

@@ -11,7 +11,7 @@ function Product(props) {
       <div className='w-64 h-80 m-4 mb-14'>
         
         <Link
-          to={`/product_details/${props.name}`}
+          to={`/product_details/${encodeURIComponent(props.name)}`}
           state = {{
             title: props.name.split(' ').slice(0, 1).join(' '),
             name: props.name,
@@ -28,7 +28,7 @@ function Product(props) {
 
         <div className='px-5 py-2'>
           <a className='font-bold'>{props.name.split(' ').slice(0, 1).join(' ')}</a><br/>
-          <a>{props.name.split(' ').slice(2, 8).join(' ')}</a><br/>
+          <a>{props.name.split(' ').slice(1, 7).join(' ')}</a><br/>
           <a>{props.price}</a><br/>
           <a>
             {Array(starCount).fill().map((_, index) => (

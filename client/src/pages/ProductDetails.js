@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { logAction } from '../util/util';
 
 function ProductDetails() {
   
@@ -41,27 +42,9 @@ function ProductDetails() {
     } catch (error) {
       console.error('Error:', error);
     }
-  }
-
-  const logAction = async (message, code) => {
+    
     // Log action
-    try {
-      const response = await fetch('/log', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ log: `product added to basket: ${title}` }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      console.log('Log successfully sent.');
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
+    logAction(`product added to basket: ${name}`, 3);
   }
   
 

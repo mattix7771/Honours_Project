@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import toucan from '../resources/toucan.png'; //Free image from freepik.com
 import settings from '../resources/settings.png'; //Free image from freepik.com
 import basket from '../resources/basket.png'; //Free image from freepik.com
+import { logAction } from '../util/util';
 
 /**
  * Navbar component
@@ -18,32 +19,11 @@ function Navbar({runQuery}) {
     event.preventDefault();
     runQuery(userSearch);
   }
-
-  // Log action
-  const logAction = async (message, code) => {
-    try {
-      const response = await fetch('/log', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ log: message, code: code}),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      console.log('Log successfully sent.');
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
-  };
   
 
   return (
     <nav className="flex bg-indigo-950 overflow-hidden">
-      <Link to='/' onClick={() => logAction('Clicked home')}>
+      <Link to='/'>
         <img src={toucan} alt="Logo" className='float-left p-2 ml-4 w-28'/>
       </Link>
 
