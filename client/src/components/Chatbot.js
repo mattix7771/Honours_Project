@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { logAction } from '../util/util';
-import e from 'express';
-
-// Initialise botpress webchat
-
-
 
 /** 
  * Chatbot component
@@ -39,13 +34,16 @@ const Chatbot = () => {
     if(chatbotLoaded){
       console.log('Chatbot loaded');
       window.addEventListener("message", function(event) {
-        console.log(event.data.name);
+        //console.log(event);
         if (event.data.name === "webchatOpened") {
           logAction("Chatbot opened", 10);
         } else if (event.data.name === "webchatClosed") {
           logAction("Chatbot closed", 11);
-        } else if (event.data.name === "webchatMessageSent" || event.data.name === "userMessage" || event.data.name === "userPayload") {
-          console.log('User message:', event.data.text);
+        } else if (event.type === "message" && event.data.payload && event.data.payload.text) {
+          if(event.data.payload.typing)
+            console.log(`Chatbot sent message: ${event.data.payload.text}`, 13);
+          else
+            console.log(`User sent message: ${event.data.payload.text}`, 12);
         }
       })
     }
