@@ -41,9 +41,9 @@ const Chatbot = () => {
           logAction("Chatbot closed", 11);
         } else if (event.type === "message" && event.data.payload && event.data.payload.text) {
           if(event.data.payload.typing)
-            console.log(`Chatbot sent message: ${event.data.payload.text}`, 13);
+            logAction(`Chatbot sent message: ${event.data.payload.text}`, 13);
           else
-            console.log(`User sent message: ${event.data.payload.text}`, 12);
+            logAction(`User sent message: ${event.data.payload.text}`, 12);
         }
       })
     }
