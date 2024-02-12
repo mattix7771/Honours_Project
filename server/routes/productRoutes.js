@@ -17,7 +17,15 @@ router.get('/getSpecificProduct/:productType/:productFilter/:direction(ASC|DESC)
 // Get products by title
 router.get('/:titles', async (req, res) => {
   const titles = req.params.titles.split(',');
-  const products = await getProductsByTitle(titles);
+  
+  let products = [];
+
+  for (let i = 0; i < titles.length; i++) {
+    products.push(await getProductsByTitle(titles[i]));
+  }
+
+  console.log(products);
+  
   res.send(products);
 });
 

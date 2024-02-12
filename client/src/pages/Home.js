@@ -60,30 +60,6 @@ function Home() {
     }
   }, []);
 
-  // Update products when a new search is made
-  const runQuery = async (userSearch) => {
-    try {
-      const response = await fetch(`/products/${userSearch}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const data = await response.json();
-      console.log(data);
-      
-      setProducts(data);
-
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
   // Log starting page action
   useEffect(() => {
     logAction('Opened starting page', 1);
@@ -108,7 +84,7 @@ function Home() {
     <div>
       
       {/* Navbar */}
-      <Navbar runQuery={runQuery}/>
+      <Navbar/>
 
       {/* Banner */}
       <div className='flex bg-[#caf2ff] h-full w-[90vw] m-20 rounded-3xl px-20 items-center'>

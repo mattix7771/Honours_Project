@@ -5,34 +5,54 @@ import Product from '../components/Product';
 import ReactPaginate from 'react-paginate';
 import { Button, IconButton } from '@material-tailwind/react';
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { logAction } from '../util/util';
+import { logAction, getProductsByTitle } from '../util/util';
 
 function CategoryProducts() {
-  
+
   const category = useParams().category;
   const [products, setProducts] = useState([]);
+  const [rerender, setRerender] = useState(false);
 
 	const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 24;
   const pageCount = Math.ceil(products.length / itemsPerPage);
 
-	// Fetch relevant category products
-	useEffect(() => {
-		try{
-			const fetchCategoryProducts = async () => {
-				const response = await fetch(`/products/category/${category}_backlog`);
-        const data = await response.json();
-        setProducts(data);
-			}
-			fetchCategoryProducts();
-		} catch (error) {
-			console.error('Fetch error:', error);
-		}
-	}, []);
 
-	useEffect(() => {
-		console.log('Products:', products);
-	}, [products]);
+  async function fetch(){
+    const p = await getProductsByTitle(category);
+    setProducts(p[0]);
+    return p;
+  }
+
+  useEffect(() => {
+    const fetchRelevantProducts = async () => {
+      if(category.length < 30){
+        try{
+          const p = fetch();
+          // setProducts(getProductsByTitle(category).then((data) => data[0]));
+          console.log(p);
+          setRerender(prev => !prev);
+        } catch (error) {
+          console.error('Fetch error:', error);
+        }
+      } else{
+        // Fetch relevant category products
+        try{
+            const response = await fetch(`/products/category/${category}_backlog`);
+            const data = await response.json();
+            setProducts(data);
+        } catch (error) {
+          console.error('Fetch error:', error);
+        }
+      }
+    };
+    fetchRelevantProducts();
+  }, [category]);
+  
+
+	// useEffect(() => {
+	// 	console.log('Products:', products);
+	// }, [products]);
 
   useEffect(() => {
     logAction(`opened ${category} product category`, 6);

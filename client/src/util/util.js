@@ -24,3 +24,34 @@ export function logAction(message, code){
 		console.error('Error:', error.message);
 	}
 };
+
+/**
+ * API call to get products by category
+ * @function
+ * @param {string} category - The category to search for.
+ * @returns {object} - The products found.
+ */
+export async function getProductsByTitle(productTitles){
+
+	try {
+		const response = await fetch(`/products/${productTitles}`, {
+		  method: 'GET',
+		  headers: {
+			'Content-Type': 'application/json',
+		  },
+		});
+	
+		if (!response.ok) {
+		  throw new Error('Network response was not ok');
+		}
+
+		// console.log('Response:', response);
+		const data = await response.json();
+		// console.log('Response:', data);
+	
+		return data;
+  
+	  } catch (error) {
+		console.error('Error:', error);
+	  }
+};
