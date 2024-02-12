@@ -111,10 +111,12 @@ function Home() {
       <Navbar runQuery={runQuery}/>
 
       {/* Banner */}
-      <div className='flex bg-[#caf2ff] h-full w-[calc(100%-160px)] m-20 rounded-3xl px-20'>
-        <div className="text-6xl min-w-fit font-serif font-semibold text-gray-800 leading-relaxed pt-32">Tech Made Simple,<br/>Shopping Made Fun.
-          <div className='text-2xl pt-36 float-right'>Shop our best sellers here<br/>
-            <button className='bg-[#9ce6ff] ml-[50%]' onClick={() => {window.scrollTo({top: 1000, behavior: "smooth"})}}>View</button>
+      <div className='flex bg-[#caf2ff] h-full w-[90vw] m-20 rounded-3xl px-20 items-center'>
+        <div>
+          <div className="text-6xl min-w-fit font-serif font-semibold text-gray-800 leading-relaxed pt-32">Tech Made Simple,<br/>Shopping Made Fun.
+            <div className='text-2xl pt-36 float-right'>Shop our best sellers here<br/>
+              <button className='bg-[#9ce6ff] ml-[50%]' onClick={() => {window.scrollTo({top: 1000, behavior: "smooth"})}}>View</button>
+            </div>
           </div>
         </div>
         <img src={DigitalDevices} className='ml-auto'/>
