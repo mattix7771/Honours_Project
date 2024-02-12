@@ -29,7 +29,6 @@ function CategoryProducts() {
       if(category.length < 30){
         try{
           const p = fetch();
-          // setProducts(getProductsByTitle(category).then((data) => data[0]));
           console.log(p);
           setRerender(prev => !prev);
         } catch (error) {
@@ -48,11 +47,6 @@ function CategoryProducts() {
     };
     fetchRelevantProducts();
   }, [category]);
-  
-
-	// useEffect(() => {
-	// 	console.log('Products:', products);
-	// }, [products]);
 
   useEffect(() => {
     logAction(`opened ${category} product category`, 6);

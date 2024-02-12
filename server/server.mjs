@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-//import { handleRequest } from './chatbot.js';
+import { handleRequest } from './chatbot.js';
 import basketRoutes from './routes/basketRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import fs from 'fs';
@@ -47,7 +47,8 @@ app.use('/basket', basketRoutes);
 // API endpoint to handle LLM chat requests
 app.post('/chat', async (req, res) => {
   const userPrompt = req.body.prompt;
-  const reply = await handleRequest(session, res, userPrompt);
+  const reply = await handleRequest(res, userPrompt);
+  console.log(reply);
   res.json({ reply });
 });
 
