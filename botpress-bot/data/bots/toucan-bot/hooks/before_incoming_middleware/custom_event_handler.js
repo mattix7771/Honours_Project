@@ -7,17 +7,11 @@
       threadId: event.threadId
     }
 
-    const product = event.payload.payload.payload.product
-
     // Skip event processing
     event.setFlag(bp.IO.WellKnownFlags.SKIP_DIALOG_ENGINE, true)
 
-    // Make the bot respond with custom content instead
-
-    bp.cms.renderElement('builtin_text', { text: product.price, typing: true }, eventDestination).then(payloads => {
-      bp.events.replyToEvent(event, payloads)
-    })
-    bp.cms.renderElement('builtin_text', { text: 'Hello', typing: true }, eventDestination).then(payloads => {
-      bp.events.replyToEvent(event, payloads)
-    })
+    // Execute starting node
+    const sessionId = bp.dialog.createId(event)
+    bp.dialog.jumpTo(sessionId, event, 'Main', 'entry')
+    bp.dialog.processEvent(sessionId, event)
   }

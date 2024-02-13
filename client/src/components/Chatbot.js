@@ -39,6 +39,11 @@ const Chatbot = () => {
           logAction("Chatbot opened", 10);
         } else if (event.data.name === "webchatClosed") {
           logAction("Chatbot closed", 11);
+        } else if (event.data.name === "webchatReady") {
+          window.botpressWebChat.sendEvent({
+            type: 'proactive-trigger',
+            channel: 'web'
+          });
         } else if (event.type === "message" && event.data.payload && event.data.payload.text) {
           if(event.data.payload.typing)
             logAction(`Chatbot sent message: ${event.data.payload.text}`, 13);
