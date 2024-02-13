@@ -10,7 +10,7 @@
   const myAction = async (productType, productFilter) => {
     var config = {
       method: 'get',
-      url: `http://localhost:5000/products/getSpecificProduct/${productType}/${productFilter}/ASC`,
+      url: `http://localhost:5000/products/getSpecificProduct/${productType}/${productFilter}/ASC/5`,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
@@ -33,6 +33,7 @@
       products.push(item)
     })
     console.log(products)
+
     const carouselItems = products.map(product => ({
       title: product.titlePayload.slice(0, 2),
       subtitle: product.pricePayload,
