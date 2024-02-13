@@ -9,6 +9,8 @@ import { logAction, getProductsByTitle } from '../util/util';
 
 function CategoryProducts() {
 
+  console.log(useParams());
+
   const category = useParams().category;
   const [products, setProducts] = useState([]);
   const [rerender, setRerender] = useState(false);
@@ -18,18 +20,20 @@ function CategoryProducts() {
   const pageCount = Math.ceil(products.length / itemsPerPage);
 
 
-  async function fetch(){
-    const p = await getProductsByTitle(category);
-    setProducts(p[0]);
-    return p;
+  async function fetchDataFromSearch(){
+    try{
+      const p = await getProductsByTitle(category);
+      setProducts(p[0]);
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
   }
 
   useEffect(() => {
     const fetchRelevantProducts = async () => {
-      if(category.length < 30){
+      if(category != 'phones' && category != 'watches' && category != 'laptops' && category != 'headphones' && category != 'tvs'){
         try{
-          const p = fetch();
-          console.log(p);
+          const p = fetchDataFromSearch();
           setRerender(prev => !prev);
         } catch (error) {
           console.error('Fetch error:', error);
@@ -37,9 +41,19 @@ function CategoryProducts() {
       } else{
         // Fetch relevant category products
         try{
-            const response = await fetch(`/products/category/${category}_backlog`);
-            const data = await response.json();
-            setProducts(data);
+          const response = await fetch(`/products/category/${category}_backlog`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const data = await response.json();
+          setProducts(data);
         } catch (error) {
           console.error('Fetch error:', error);
         }
