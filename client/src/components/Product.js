@@ -29,7 +29,7 @@ function Product(props) {
         <div className='px-5 py-2'>
           <a className='font-bold'>{props.name.split(' ').slice(0, 1).join(' ')}</a><br/>
           <a>{props.name.split(' ').slice(1, 7).join(' ')}</a><br/>
-          <a>{props.price}</a><br/>
+          <a>£{props.price}</a><br/>
           <a>
             {Array(starCount).fill().map((_, index) => (
               <span key={index}>⭐</span>

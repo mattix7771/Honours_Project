@@ -14,7 +14,7 @@
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      data: { prompt: 'Hello' }
+      data: { prompt: prompt }
     }
 
     const response = await axios(config)

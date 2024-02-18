@@ -31,10 +31,10 @@ export function logAction(message, code){
  * @param {string} category - The category to search for.
  * @returns {object} - The products found.
  */
-export async function getProductsByTitle(productTitles){
+export async function getProductsByTitle(productTitle){
 
 	try {
-		const response = await fetch(`/products/${productTitles}`, {
+		const response = await fetch(`/products/${productTitle}`, {
 		  method: 'GET',
 		  headers: {
 			'Content-Type': 'application/json',

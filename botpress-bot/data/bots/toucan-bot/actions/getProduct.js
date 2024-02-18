@@ -25,7 +25,7 @@
     data.forEach(product => {
       const item = {
         titlePayload: product.name,
-        pricePayload: product.price,
+        pricePayload: '£' + product.price,
         ratingPayload: product.rating,
         imagePayload: product.image,
         featuresPayload: product.features
