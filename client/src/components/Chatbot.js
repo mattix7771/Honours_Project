@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate  } from 'react-router-dom';
 import { logAction } from '../util/util';
 
 /** 
@@ -8,6 +9,7 @@ import { logAction } from '../util/util';
 const Chatbot = () => {
 
   const [chatbotLoaded, setChatbotLoaded] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     
@@ -29,7 +31,6 @@ const Chatbot = () => {
     }
   }, [chatbotLoaded]);
 
-
   useEffect(() => {
     if(chatbotLoaded){
       console.log('Chatbot loaded');
@@ -44,6 +45,9 @@ const Chatbot = () => {
             type: 'proactive-trigger',
             channel: 'web'
           });
+        } else if(event.type === "message" && event.data.data && event.data.type == "data"){
+          const data = event.data.data.split(',');
+          navigate(`/category_products/${JSON.stringify(data)}`);
         } else if (event.type === "message" && event.data.payload && event.data.payload.text) {
           if(event.data.payload.typing)
             logAction(`Chatbot sent message: ${event.data.payload.text}`, 13);

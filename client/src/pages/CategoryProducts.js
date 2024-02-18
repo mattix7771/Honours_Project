@@ -14,6 +14,7 @@ function CategoryProducts() {
   const category = useParams().category;
   const [products, setProducts] = useState([]);
   const [rerender, setRerender] = useState(false);
+  const [title, setTitle] = useState('');
 
 	const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 24;
@@ -29,11 +30,39 @@ function CategoryProducts() {
     }
   }
 
+  async function fetchRecommendedProducts(productDetails){
+    try{
+      const response = await fetch(`/products/getSpecificProduct/${productDetails[0]}/${productDetails[1]}/ASC/5`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+
+      const data = await response.json();
+      console.log(data);
+      setProducts(data);
+      
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchRelevantProducts = async () => {
-      if(category != 'phones' && category != 'watches' && category != 'laptops' && category != 'headphones' && category != 'tvs'){
+      if(category.includes('[')){
+
+        const productDetails = JSON.parse(category);
+        fetchRecommendedProducts(productDetails);
+
+        setTitle("Recommended products");
+
+        
+      } else if(category != 'phones' && category != 'watches' && category != 'laptops' && category != 'headphones' && category != 'tvs'){
         try{
           const p = fetchDataFromSearch();
+          setTitle("Search results: " + category)
           setRerender(prev => !prev);
         } catch (error) {
           console.error('Fetch error:', error);
@@ -54,6 +83,8 @@ function CategoryProducts() {
 
           const data = await response.json();
           setProducts(data);
+
+          setTitle("Category: " + category);
         } catch (error) {
           console.error('Fetch error:', error);
         }
@@ -87,7 +118,7 @@ function CategoryProducts() {
     <>
       <Navbar />
       <div className="flex justify-center items-center">
-          <h1 className="text-6xl font-bold text-indigo-950">Category: {category}</h1>
+          <h1 className="text-6xl font-bold text-indigo-950">{title}</h1>
       </div>
 
       
