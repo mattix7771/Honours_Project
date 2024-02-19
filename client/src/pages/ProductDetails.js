@@ -64,7 +64,7 @@ function ProductDetails() {
           <a className='text-7xl font-bold'>{title}</a><br/>
           <div className='m-5 text-3xl font-semibold'>
             <a className=''>{name}</a><br/>
-            <a>{price}</a><br/>
+            <a>£{price}</a><br/>
             <a>{rating}</a><br/>
           </div>
           <button className='bg-blue-300 w-40 h-20 font-bold text-lg' onClick={addToCart}>
