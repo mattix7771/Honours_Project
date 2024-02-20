@@ -1,20 +1,30 @@
 import path from 'path';
 import fs from 'fs';
-import readline from 'readline';
 import ini from 'ini';
 import { fileURLToPath } from 'url';
 import { getSpecificProduct } from './database.js';
 import { LlamaModel, LlamaContext, LlamaChatSession } from 'node-llama-cpp';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// get chatbot configuration from config file
+const configFilePath = path.join(__dirname, "../init_config.ini");
+const config = ini.parse(fs.readFileSync(configFilePath, 'utf-8'));
+const chatbotConfig = config.LLM;
 
+// set up chatbot configuration
+const model_name = chatbotConfig.model;
+const llm_max_tokens = parseInt(chatbotConfig.llm_max_tokens);
+const gpu_layers = parseInt(chatbotConfig.gpu_layers);
+const llm_temperature = parseInt(chatbotConfig.llm_temperature);
+const llm_top_k = parseInt(chatbotConfig.llm_top_k);
+const llm_top_p = parseInt(chatbotConfig.llm_top_p);
 
 // Initialize the Llama Model
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const modelPath = path.join(__dirname, "models", "llama-2-7b-chat.Q2_K.gguf");
+const modelPath = path.join(__dirname, "models", model_name);
 // const model = new LlamaModel({ modelPath });
 const model = new LlamaModel({
   modelPath,
-  gpuLayers: 33,
+  gpuLayers: gpu_layers,
   streaming: true
 });
 
@@ -29,7 +39,7 @@ async function addKnowledgeToModel(){
   const lines = knowledge.split(/\r?\n/);
 
   for (const line of lines) {
-    await session.prompt(line);
+    session.prompt(line);
   }
   console.log("llama_knowledge_added_to_model");
 }
@@ -52,7 +62,7 @@ export async function handleRequest(res, userPrompt){
 
     const productCategories = ["phones", "tvs", "headphones", "laptops", "watches"];
     let userPromptCategory, userPromptFilter, direction, limit = 1;
-    let suggestedProductString;
+    let suggestedProduct, suggestedProductString;
 
     for (const category of productCategories) {
       if (userPrompt.includes(category) || userPrompt.includes(category.slice(0, -1))) {
@@ -88,28 +98,50 @@ export async function handleRequest(res, userPrompt){
     //   return reply;
     // } else
      if(userPromptCategory && userPromptFilter && direction){
-      const products = await getSpecificProduct(userPromptCategory, userPromptFilter, direction, limit);
-      suggestedProductString = products[0].name.split(' ').slice(0,5).join(' ') + " £" + products[0].price + " " + products[0].rating.split(' ').slice(0,1) + " stars";
+      suggestedProduct = await getSpecificProduct(userPromptCategory, userPromptFilter, direction, limit);
+      suggestedProductString = suggestedProduct[0].name.split(' ').slice(0,5).join(' ') + " £" + suggestedProduct[0].price + " " + suggestedProduct[0].rating.split(' ').slice(0,1) + " stars";
       const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + suggestedProductString, {
-        maxTokens: 70,
+        maxTokens: llm_max_tokens,
+        temperature: llm_temperature,
+        topK: llm_top_k,
+        topP: llm_top_p
       });
       console.log("user prompt: " + userPrompt + " suggested products: " + suggestedProductString)
       return reply;
     } else if(userPromptCategory){
-      const products = await getSpecificProduct(userPromptCategory, "price", "ASC", limit);
-      suggestedProductString = products[0].name.split(' ').slice(0,5).join(' ') + " £" + products[0].price + " " + products[0].rating.split(' ').slice(0,1) + " stars";
+      suggestedProduct = await getSpecificProduct(userPromptCategory, "price", "ASC", limit);
+      suggestedProductString = suggestedProduct[0].name.split(' ').slice(0,5).join(' ') + " £" + suggestedProduct[0].price + " " + suggestedProduct[0].rating.split(' ').slice(0,1) + " stars";
       const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + suggestedProductString, {
-        maxTokens: 70,
+        maxTokens: llm_max_tokens,
+        temperature: llm_temperature,
+        topK: llm_top_k,
+        topP: llm_top_p
       });
       console.log("user prompt: " + userPrompt + " suggested products: " + suggestedProductString)
       return reply;
     } else {
       const reply = session.prompt("user prompt: \"" + userPrompt + "\"", {
-        maxTokens: 70,
+        maxTokens: llm_max_tokens,
+        temperature: llm_temperature,
+        topK: llm_top_k,
+        topP: llm_top_p
       });
       console.log("user prompt: " + userPrompt + " suggested products: " + suggestedProductString)
       return reply;
     }
+
+    function promptLLM(){
+      suggestedProductString = suggestedProduct[0].name.split(' ').slice(0,5).join(' ') + " £" + suggestedProduct[0].price + " " + suggestedProduct[0].rating.split(' ').slice(0,1) + " stars";
+      const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + suggestedProductString, {
+        maxTokens: llm_max_tokens,
+        temperature: llm_temperature,
+        topK: llm_top_k,
+        topP: llm_top_p
+      });
+      console.log("user prompt: " + userPrompt + " suggested products: " + suggestedProductString)
+      return reply;
+    }
+
   } catch (error) {
     console.error(error);
   }
