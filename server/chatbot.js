@@ -1,13 +1,16 @@
 import path from 'path';
 import fs from 'fs';
 import readline from 'readline';
+import ini from 'ini';
 import { fileURLToPath } from 'url';
 import { getSpecificProduct } from './database.js';
 import { LlamaModel, LlamaContext, LlamaChatSession } from 'node-llama-cpp';
 
+
+
 // Initialize the Llama Model
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const modelPath = path.join(__dirname, "models", "llama-2-7b-chat.Q3_K_S.gguf");
+const modelPath = path.join(__dirname, "models", "llama-2-7b-chat.Q2_K.gguf");
 // const model = new LlamaModel({ modelPath });
 const model = new LlamaModel({
   modelPath,
@@ -48,7 +51,8 @@ export async function handleRequest(res, userPrompt){
     }
 
     const productCategories = ["phones", "tvs", "headphones", "laptops", "watches"];
-    let userPromptCategory, userPromptFilter, direction;
+    let userPromptCategory, userPromptFilter, direction, limit = 1;
+    let suggestedProductString;
 
     for (const category of productCategories) {
       if (userPrompt.includes(category) || userPrompt.includes(category.slice(0, -1))) {
@@ -69,25 +73,41 @@ export async function handleRequest(res, userPrompt){
     } else if (userPrompt.includes("worst") || userPrompt.includes("bottom") || userPrompt.includes("lowest") || userPrompt.includes("least")){
       userPromptFilter = "rating";
       direction = "ASC";
+    } else if (userPrompt.includes("other") || userPrompt.includes("different") || userPrompt.includes("another") || userPrompt.includes("alternative") || userPrompt.includes("similar") || userPrompt.includes("option")){
+      userPromptFilter = "price";
+      direction = "ASC";
+      limit = 2;
     }
 
-    if(userPromptCategory && userPromptFilter && direction){
-      const products = await getSpecificProduct(userPromptCategory, userPromptFilter, direction, 3);
-      const reply = session.prompt("suggested products: " + JSON.stringify(products) + " user prompt: " + userPrompt, {
+    // if(userPromptCategory && userPromptFilter && direction && limit != 1){
+    //   const products = await getSpecificProduct(userPromptCategory, userPromptFilter, direction, limit);
+    //   console.log(products[1])
+    //   const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + JSON.stringify(products[1]), {
+    //     //maxTokens: 70,
+    //   });
+    //   return reply;
+    // } else
+     if(userPromptCategory && userPromptFilter && direction){
+      const products = await getSpecificProduct(userPromptCategory, userPromptFilter, direction, limit);
+      suggestedProductString = products[0].name.split(' ').slice(0,5).join(' ') + " £" + products[0].price + " " + products[0].rating.split(' ').slice(0,1) + " stars";
+      const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + suggestedProductString, {
         maxTokens: 70,
       });
+      console.log("user prompt: " + userPrompt + " suggested products: " + suggestedProductString)
       return reply;
     } else if(userPromptCategory){
-      const products = await getSpecificProduct(userPromptCategory, "price", "ASC", 3);
-      const reply = session.prompt("suggested products: " + JSON.stringify(products) + " user prompt: " + userPrompt, {
+      const products = await getSpecificProduct(userPromptCategory, "price", "ASC", limit);
+      suggestedProductString = products[0].name.split(' ').slice(0,5).join(' ') + " £" + products[0].price + " " + products[0].rating.split(' ').slice(0,1) + " stars";
+      const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + suggestedProductString, {
         maxTokens: 70,
       });
-      console.log("suggested products: " + JSON.stringify(products) + " user prompt: " + userPrompt)
+      console.log("user prompt: " + userPrompt + " suggested products: " + suggestedProductString)
       return reply;
     } else {
-      const reply = session.prompt(userPrompt, {
+      const reply = session.prompt("user prompt: \"" + userPrompt + "\"", {
         maxTokens: 70,
       });
+      console.log("user prompt: " + userPrompt + " suggested products: " + suggestedProductString)
       return reply;
     }
   } catch (error) {
