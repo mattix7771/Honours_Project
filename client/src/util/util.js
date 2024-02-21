@@ -51,7 +51,7 @@ export async function getProductsByTitle(productTitle){
 	
 		return data;
   
-	  } catch (error) {
+	} catch (error) {
 		console.error('Error:', error);
-	  }
+	}
 };
