@@ -1,10 +1,15 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { handleRequest } from './chatbot.js';
+//import { handleRequest } from './chatbot.js';
 import basketRoutes from './routes/basketRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(bodyParser.json());
@@ -47,9 +52,16 @@ app.use('/basket', basketRoutes);
 // API endpoint to handle LLM chat requests
 app.post('/chat', async (req, res) => {
   const userPrompt = req.body.prompt;
+  const date1 = new Date();
   const reply = await handleRequest(res, userPrompt);
-  console.log(reply);
-  res.json({ reply });
+  const date2 = new Date();
+  console.log("Elapsed time: " + (date2 - date1) + "ms");
+  res.send({ reply });
+});
+
+app.get('/config', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.sendFile(path.join(__dirname, '../init_config.ini'));
 });
 
 const PORT = process.env.PORT || 5000;

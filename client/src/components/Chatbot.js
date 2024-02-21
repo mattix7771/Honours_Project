@@ -1,6 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate  } from 'react-router-dom';
 import { logAction } from '../util/util';
+import ini from 'ini';
+
+//set up chatbot configuration
+let chatbot_name;
+
+// get chatbot configuration from config file
+fetch('/config')
+  .then(res => {
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return res.text(); // Get the response body as text
+  })
+  .then(data => {
+    const config = ini.parse(data, 'utf-8');
+    const chatbotConfig = config.Chatbot;
+    chatbot_name = chatbotConfig.chatbot;
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+
+
+
 
 /** 
  * Chatbot component
@@ -24,7 +48,7 @@ const Chatbot = () => {
       script.onload = () => {
         window.botpressWebChat.init({
           host: "http://localhost:3001",
-          botId: "toucan-bot"
+          botId: chatbot_name
         });
       }
       setChatbotLoaded(true);
