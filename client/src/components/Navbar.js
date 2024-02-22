@@ -45,11 +45,6 @@ function Navbar({runQuery}) {
           <img src={basket}/>
         </button>
       </Link>
-      <Link to='/settings' className='float-right self-center p-2 m-2 mx-2 w-20 h-full'>
-        <button>
-          <img src={settings}/>
-        </button>
-      </Link>
     </nav>
   );
 };
