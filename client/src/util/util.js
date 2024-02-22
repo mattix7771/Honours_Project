@@ -1,3 +1,5 @@
+import ini from 'ini';
+
 /** 
  * API call to log actions and the respective action code
  * @function
@@ -45,13 +47,42 @@ export async function getProductsByTitle(productTitle){
 		  throw new Error('Network response was not ok');
 		}
 
-		// console.log('Response:', response);
 		const data = await response.json();
-		// console.log('Response:', data);
 	
 		return data;
   
 	} catch (error) {
 		console.error('Error:', error);
 	}
+};
+
+/**
+ * API call to get preset values from config file
+ * @function
+ * @param {string} section - The section of the config file to retrieve.
+ * @returns {String} - The appropriate section of the config file.
+ */
+export async function getConfig(section){
+
+	// check whether section is valid
+	if (section != "Chatbot" && section != "webStore")
+		return new Error('invlid config section')
+
+  try {
+		const response = await fetch(`/config`, {
+			method: 'GET'
+		});
+
+		if (!response.ok) {
+			throw new Error('Network response was not ok');
+		}
+
+		const config = ini.parse(await response.text(), 'utf-8');
+    const chatbotConfig = config[section];
+
+		return chatbotConfig;
+
+  } catch (error) {
+		console.error('Error:', error);
+  }
 };
