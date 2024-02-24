@@ -64,6 +64,19 @@ app.get('/config', (req, res) => {
   res.sendFile(path.join(__dirname, '../init_config.ini'));
 });
 
+app.post('/configWrite', (req, res) => {
+  const variable = req.body.variable;
+  const value = req.body.value;
+  
+  const file = fs.readFileSync(path.join(__dirname, '../init_config.ini'), 'utf8');
+
+  const config = file.replace(new RegExp(`${variable} = .+`), `${variable} = ${value}`);
+
+  fs.writeFile(path.join(__dirname, '../init_config.ini'), config, err => {if(err) {console.error(err)}});
+  
+  res.sendStatus(200);
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
