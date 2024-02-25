@@ -65,7 +65,7 @@ export async function getProductsByTitle(productTitle){
 export async function getConfig(section){
 
 	// check whether section is valid
-	if (section != "Chatbot" && section != "webStore")
+	if (section != "Chatbot" && section != "webStore" && section != "all")
 		return new Error('invlid config section')
 
   try {
@@ -78,6 +78,11 @@ export async function getConfig(section){
 		}
 
 		const config = ini.parse(await response.text(), 'utf-8');
+
+		if(section === "all"){
+			return config;
+		}
+
     const chatbotConfig = config[section];
 
 		return chatbotConfig;

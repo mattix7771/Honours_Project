@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getConfig } from '../util/util';
+import Slider from '../components/Slider';
 import angle_down from '../resources/angle down.png' //Free image from freepik.com
 
 // get configurations from config file
@@ -172,37 +173,63 @@ function Settings() {
       <h2 className='m-10 font-bold text-xl'>Language Model Settings (requires server restart)</h2>
 
       <h2 className='mx-10 my-5'>Model name (must be a valid model present in server/models)</h2>
-      <input type='text' className='border-solid border-gray-400 border-2 px-5 py-2 rounded mx-10' onChange={(e) => {setModelName(e.target.value); saveChangeToFile('model', e.target.value)}}/>
+      <input type='text' defaultValue={modelName} className='border-solid border-gray-400 border-2 px-5 py-2 rounded mx-10' onChange={(e) => {setModelName(e.target.value); saveChangeToFile('model', e.target.value)}}/>
       
-      <h2 className='mx-10 my-5'>Max tokens</h2>
-      <div className='mx-10'>
-        <input type="range" min="0" max="200" defaultValue={llmMaxTokens} class="range" id="llm_max_tokens" onChange={(e) => {setLlmMaxTokens(e.target.value); saveChangeToFile('llm_max_tokens', e.target.value)}}/>
-        <label for="llm_max_tokens">{llmMaxTokens}</label>
-      </div>
+      <Slider
+        id='llm_max_tokens'
+        title='Max tokens'
+        min='0'
+        max='200'
+        step='1'
+        defaultValue={llmMaxTokens}
+        setVariable={setLlmMaxTokens}
+        saveChangeToFile={saveChangeToFile}
+      />
 
-      <h2 className='mx-10 my-5'>Temperature (0 to disable)</h2>
-      <div className='mx-10'>
-        <input type="range" min="0" max="2" step="0.1" defaultValue={llmTemperature} class="range" id="llm_temperature" onChange={(e) => {setLlmTemperature(e.target.value); saveChangeToFile('llm_temperature', e.target.value)}}/>
-        <label for="llm_temperature">{llmTemperature}</label>
-      </div>
+      <Slider
+        id='llm_temperature'
+        title='Temperature (0 to disable)'
+        min='0'
+        max='2'
+        step='0.1'
+        defaultValue={llmTemperature}
+        setVariable={setLlmTemperature}
+        saveChangeToFile={saveChangeToFile}
+      />
 
-      <h2 className='mx-10 my-5'>Top K (0 to disable)</h2>
-      <div className='mx-10'>
-        <input type="range" min="0" max="1" step="0.1" defaultValue={llmTopK} class="range" id="llm_top_k" onChange={(e) => {setLlmTopK(e.target.value); saveChangeToFile('llm_top_k', e.target.value)}}/>
-        <label for="llm_top_k">{llmTopK}</label>
-      </div>
+      <Slider
+        id='llm_top_k'
+        title='Top K (0 to disable)'
+        min='0'
+        max='1'
+        step='0.1'
+        defaultValue={llmTopK}
+        setVariable={setLlmTopK}
+        saveChangeToFile={saveChangeToFile}
+      />
 
-      <h2 className='mx-10 my-5'>Top P (1 to disable)</h2>
-      <div className='mx-10'>
-        <input type="range" min="0" max="1" step="0.1" defaultValue={llmTopP} class="range" id="llm_top_p" onChange={(e) => {setLlmTopP(e.target.value); saveChangeToFile('llm_top_p', e.target.value)}}/>
-        <label for="llm_top_p">{llmTopP}</label>
-      </div>
+      <Slider
+        id='llm_top_p'
+        title='Top P (1 to disable)'
+        min='0'
+        max='1'
+        step='0.1'
+        defaultValue={llmTopP}
+        setVariable={setLlmTopP}
+        saveChangeToFile={saveChangeToFile}
+      />
 
-      <h2 className='mx-10 my-5'>GPU Layers</h2>
-      <div className='mx-10'>
-        <input type="range" min="1" max="200" defaultValue={gpuLayers} class="range" id="gpu_layers" onChange={(e) => {setGpuLayers(e.target.value); saveChangeToFile('gpu_layers', e.target.value)}}/>
-        <label for="gpu_layers">{gpuLayers}</label>
-      </div>
+      <Slider
+        id='gpu_layers'
+        title='GPU Layers'
+        min='1'
+        max='200'
+        step='1'
+        defaultValue={gpuLayers}
+        setVariable={setGpuLayers}
+        saveChangeToFile={saveChangeToFile}
+      />
+
 
 
 
