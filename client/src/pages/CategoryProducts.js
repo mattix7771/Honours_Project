@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import { Button, IconButton } from '@material-tailwind/react';
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { logAction, getProductsByTitle } from '../util/util';
+import angle_down from '../resources/angle down.png'; //Free image from freepik.com
 
 function CategoryProducts() {
 
@@ -19,6 +20,8 @@ function CategoryProducts() {
 	const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 24;
   const pageCount = Math.ceil(products.length / itemsPerPage);
+
+  const [filter, setFilter] = useState('Relevance');
 
 
   async function fetchDataFromSearch(){
@@ -114,6 +117,36 @@ function CategoryProducts() {
     setCurrentPage(itemsPerPage.selected);
   }
 
+  function toggleDropdown(){
+    const dropdown = document.getElementById('chatbotDropdown');
+    dropdown.classList.toggle('hidden');
+  }
+
+  function updateDropdown(filter){
+    setFilter(filter);
+    toggleDropdown();
+  }
+
+  useEffect(() => {
+
+    let sortedProducts = [...products];
+
+    if(filter == 'Lowest price'){
+      sortedProducts.sort((a, b) => a.price - b.price);
+    } else if(filter == 'Highest price'){
+      sortedProducts.sort((a, b) => b.price - a.price);
+    } else if(filter == 'Lowest rating')
+      sortedProducts.sort((a, b) => a.rating.split(' ').slice(0,1) - b.rating.split(' ').slice(0,1));
+    else if(filter == 'Highest rating')
+      sortedProducts.sort((a, b) => b.rating.split(' ').slice(0,1) - a.rating.split(' ').slice(0,1));
+    else
+      sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+
+    setProducts(sortedProducts);
+
+  }, [filter]);
+  
+
   return (
     <>
       <Navbar />
@@ -121,6 +154,19 @@ function CategoryProducts() {
           <h1 className="text-6xl font-bold text-indigo-950">{title}</h1>
       </div>
 
+      
+      <div className='relative my-10'>
+        <div className=' w-64 mx-10 border-solid border-gray-400 border-2 px-5 py-2 rounded cursor-pointer font-bold hover:bg-gray-100' onClick={toggleDropdown}>Sort by: {filter}
+          <img src={angle_down} className='h-5 w-5 float-right mt-0.5'/>
+        </div>
+          <div className='hidden rounded border-gray-400 bg-white absolute w-64 border-2 mx-10 shadow-md' id='chatbotDropdown'>
+            <div className='hover:bg-gray-100 cursor-pointer p-4' onClick={() => updateDropdown('Relevance')}>Relevance</div>
+            <div className='hover:bg-gray-100 cursor-pointer p-4' onClick={() => updateDropdown('Lowest price')}>Lowest Price</div>
+            <div className='hover:bg-gray-100 cursor-pointer p-4' onClick={() => updateDropdown('Highest price')}>Highest Price</div>
+            <div className='hover:bg-gray-100 cursor-pointer p-4' onClick={() => updateDropdown('Highest rating')}>Highest Rating</div>
+            <div className='hover:bg-gray-100 cursor-pointer p-4' onClick={() => updateDropdown('Lowest rating')}>Lowest Rating</div>
+          </div>
+      </div>
       
 
 
