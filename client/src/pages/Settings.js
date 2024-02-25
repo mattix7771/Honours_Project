@@ -12,6 +12,14 @@ const productCategories = Array.from(config.webStore.productCategories.replace('
 const num_products = config.webStore.num_products;
 const chatbot_name = config.Chatbot.chatbot;
 
+const model_name = config.LLM.model;
+const llm_max_tokens = config.LLM.llm_max_tokens;
+const llm_temperature = config.LLM.llm_temperature;
+const llm_top_k = config.LLM.llm_top_k;
+const llm_top_p = config.LLM.llm_top_p;
+const gpu_layers = config.LLM.gpu_layers;
+
+
 
 
 function Settings() {
@@ -24,7 +32,14 @@ function Settings() {
     watches: productCategories.includes('watches')
   });
 
+  const [numProducts, setNumProducts] = useState(num_products);
+  const [modelName, setModelName] = useState(model_name);
   const [chatbotName, setChatbotName] = useState(chatbot_name);
+  const [llmMaxTokens, setLlmMaxTokens] = useState(llm_max_tokens);
+  const [llmTemperature, setLlmTemperature] = useState(llm_temperature);
+  const [llmTopK, setLlmTopK] = useState(llm_top_k);
+  const [llmTopP, setLlmTopP] = useState(llm_top_p);
+  const [gpuLayers, setGpuLayers] = useState(gpu_layers);
 
 
 
@@ -68,15 +83,6 @@ function Settings() {
     newCategories = newCategories.slice(0, -1);
 
     saveChangeToFile('productCategories', newCategories);
-
-
-
-    
-    // const { id, checked } = event.target;
-    // setCheckboxes({
-    //   ...checkboxes,
-    //   [id]: checked,
-    // });
   };
 
   // Save to state to ini file when changed
@@ -123,25 +129,6 @@ function Settings() {
   
   return (
     <>
-      {/* {Object.entries(checkboxes).map(([id, isChecked]) => (
-        <div className='m-10' key={id}>
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              id={id}
-              type="checkbox"
-              className="sr-only peer"
-              checked={isChecked}
-              onChange={CheckboxChange}
-            />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
-            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Product Category: {id.charAt(0).toUpperCase() + id.slice(1)}</span>
-          </label>
-          <br/>
-        </div>
-      ))} */}
-
-
-
       <h2 className='m-10 font-bold text-xl'>Webstore Settings</h2>
       {Object.entries(productCategoriesMap).map(([category, value]) => {
         return(
@@ -162,6 +149,12 @@ function Settings() {
         );
       })}
 
+      <h2 className='mx-10 my-5'>Number of products on starting page</h2>
+      <div className='mx-10'>
+        <input type="range" min="1" max="10" defaultValue={numProducts} class="range" id="num_products" onChange={(e) => {setNumProducts(e.target.value); saveChangeToFile('num_products', e.target.value)}}/>
+        <label for="num_products">{numProducts}</label>
+      </div>
+
       <h2 className='m-10 font-bold text-xl'>Chatbot Settings (requires page reload)</h2>
 
       <h2 className='mx-10 my-5'>Chatbot name</h2>
@@ -179,16 +172,38 @@ function Settings() {
       <h2 className='m-10 font-bold text-xl'>Language Model Settings (requires server restart)</h2>
 
       <h2 className='mx-10 my-5'>Model name (must be a valid model present in server/models)</h2>
-      <input type='text' className='border-solid border-gray-400 border-2 px-5 py-2 rounded mx-10'/>
+      <input type='text' className='border-solid border-gray-400 border-2 px-5 py-2 rounded mx-10' onChange={(e) => {setModelName(e.target.value); saveChangeToFile('model', e.target.value)}}/>
+      
       <h2 className='mx-10 my-5'>Max tokens</h2>
-
       <div className='mx-10'>
-        <input type="range" min="0" max="100" defaultValue="40" class="range" id="llm_max_tokens" />
-        <label for="llm_max_tokens">llm_max_tokens</label>
-
+        <input type="range" min="0" max="200" defaultValue={llmMaxTokens} class="range" id="llm_max_tokens" onChange={(e) => {setLlmMaxTokens(e.target.value); saveChangeToFile('llm_max_tokens', e.target.value)}}/>
+        <label for="llm_max_tokens">{llmMaxTokens}</label>
       </div>
 
-      
+      <h2 className='mx-10 my-5'>Temperature (0 to disable)</h2>
+      <div className='mx-10'>
+        <input type="range" min="0" max="2" step="0.1" defaultValue={llmTemperature} class="range" id="llm_temperature" onChange={(e) => {setLlmTemperature(e.target.value); saveChangeToFile('llm_temperature', e.target.value)}}/>
+        <label for="llm_temperature">{llmTemperature}</label>
+      </div>
+
+      <h2 className='mx-10 my-5'>Top K (0 to disable)</h2>
+      <div className='mx-10'>
+        <input type="range" min="0" max="1" step="0.1" defaultValue={llmTopK} class="range" id="llm_top_k" onChange={(e) => {setLlmTopK(e.target.value); saveChangeToFile('llm_top_k', e.target.value)}}/>
+        <label for="llm_top_k">{llmTopK}</label>
+      </div>
+
+      <h2 className='mx-10 my-5'>Top P (1 to disable)</h2>
+      <div className='mx-10'>
+        <input type="range" min="0" max="1" step="0.1" defaultValue={llmTopP} class="range" id="llm_top_p" onChange={(e) => {setLlmTopP(e.target.value); saveChangeToFile('llm_top_p', e.target.value)}}/>
+        <label for="llm_top_p">{llmTopP}</label>
+      </div>
+
+      <h2 className='mx-10 my-5'>GPU Layers</h2>
+      <div className='mx-10'>
+        <input type="range" min="1" max="200" defaultValue={gpuLayers} class="range" id="gpu_layers" onChange={(e) => {setGpuLayers(e.target.value); saveChangeToFile('gpu_layers', e.target.value)}}/>
+        <label for="gpu_layers">{gpuLayers}</label>
+      </div>
+
 
 
       <Link to='/'>
