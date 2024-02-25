@@ -6,12 +6,13 @@ import angle_down from '../resources/angle down.png' //Free image from freepik.c
 
 // get configurations from config file
 const config = await getConfig('all');
-const allProuctCategories = ['phones', 'tvs', 'headphones', 'laptops', 'watches'];
 
 // set up all settings
 const productCategories = Array.from(config.webStore.productCategories.replace(' ', '').split(','));
 const num_products = config.webStore.num_products;
+
 const chatbot_name = config.Chatbot.chatbot;
+const chatbot_honesty = config.Chatbot.chatbot_honesty;
 
 const model_name = config.LLM.model;
 const llm_max_tokens = config.LLM.llm_max_tokens;
@@ -36,6 +37,7 @@ function Settings() {
   const [numProducts, setNumProducts] = useState(num_products);
   const [modelName, setModelName] = useState(model_name);
   const [chatbotName, setChatbotName] = useState(chatbot_name);
+  const [honesty, setHonesty] = useState(chatbot_honesty);
   const [llmMaxTokens, setLlmMaxTokens] = useState(llm_max_tokens);
   const [llmTemperature, setLlmTemperature] = useState(llm_temperature);
   const [llmTopK, setLlmTopK] = useState(llm_top_k);
@@ -46,25 +48,25 @@ function Settings() {
 
 
   // Checkboxes state
-  const [checkboxes, setCheckboxes] = useState({
-    phones: true,
-    tvs: true,
-    headphones: true,
-    laptops: true,
-    watches: true
-  });
+  // const [checkboxes, setCheckboxes] = useState({
+  //   phones: true,
+  //   tvs: true,
+  //   headphones: true,
+  //   laptops: true,
+  //   watches: true
+  // });
   
   // Restore checkbox state from local storage
-  useEffect(() => {
-    const restoredCheckboxes = {};
-    for (const key in localStorage) {
-      if (key.startsWith('checkbox_')) {
-        const id = key.replace('checkbox_', '');
-        restoredCheckboxes[id] = localStorage.getItem(key) === 'true';
-      }
-    }
-    setCheckboxes(restoredCheckboxes);
-  }, []);
+  // useEffect(() => {
+  //   const restoredCheckboxes = {};
+  //   for (const key in localStorage) {
+  //     if (key.startsWith('checkbox_')) {
+  //       const id = key.replace('checkbox_', '');
+  //       restoredCheckboxes[id] = localStorage.getItem(key) === 'true';
+  //     }
+  //   }
+  //   setCheckboxes(restoredCheckboxes);
+  // }, []);
 
   // Function to handle checkbox change
   const CheckboxChange = (category) => (event) => {
@@ -102,19 +104,19 @@ function Settings() {
   }
 
   // Save checkbox state to local storage when it changes
-  useEffect(() => {
-    for (const key in checkboxes) {
-      localStorage.setItem('checkbox_' + key, checkboxes[key]);
-    }
-  }, [checkboxes]);
+  // useEffect(() => {
+  //   for (const key in checkboxes) {
+  //     localStorage.setItem('checkbox_' + key, checkboxes[key]);
+  //   }
+  // }, [checkboxes]);
 
 
   
-  const onChange = (event) => {
-    const { id, checked } = event.target;
-    productCategoriesMap.set(id, checked);
-    document.getElementById(id).checked = checked;
-  };
+  // const onChange = (event) => {
+  //   const { id, checked } = event.target;
+  //   productCategoriesMap.set(id, checked);
+  //   document.getElementById(id).checked = checked;
+  // };
 
   function toggleDropdown(){
     const dropdown = document.getElementById('chatbotDropdown');
@@ -144,7 +146,7 @@ function Settings() {
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
               <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Product Category: {category.charAt(0).toUpperCase() + category.slice(1)}</span>
             </label>
-            <br/> 
+            <br/>
           </div>
 
         );
@@ -169,6 +171,17 @@ function Settings() {
             <div className='hover:bg-gray-100 cursor-pointer p-4' onClick={() => updateDropdown('toucan-bot-llm')}>toucan-bot-llm</div>
           </div>
       </div>
+
+      <Slider
+        id='chatbot_honesty'
+        title='Chatbot Honesty (0 - Honest, 1 - Partially honest, 2 - Dishonest)'
+        min='0'
+        max='2'
+        step='1'
+        defaultValue={honesty}
+        setVariable={setHonesty}
+        saveChangeToFile={saveChangeToFile}
+      />
 
       <h2 className='m-10 font-bold text-xl'>Language Model Settings (requires server restart)</h2>
 

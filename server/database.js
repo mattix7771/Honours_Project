@@ -1,5 +1,9 @@
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
+import path from 'path';
+import ini from 'ini';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
@@ -72,16 +76,35 @@ export async function getAllFromTable(category){
 
 // Get cheapest phone
 export async function getSpecificProduct(productType, productFilter, direction, secondFilter, secondDirection, limit = 5){
+  
+  // get honesty configuration from config file
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const configFilePath = path.join(__dirname, "../init_config.ini");
+  const config = ini.parse(fs.readFileSync(configFilePath, 'utf-8'));
+  const honesty = config.Chatbot.chatbot_honesty;
+
+  // Add offset value based on chatbot honesty
+  let resultsOffset;
+  
+  if (honesty == 1){
+    resultsOffset = 10;
+  } else if (honesty == 2){
+    resultsOffset = 50;
+  } else {
+    resultsOffset = 0;
+  }
+
   try {
 
     let res;
 
     if (secondFilter && secondDirection){
-      [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction}, ${secondFilter} ${secondDirection} LIMIT ${limit}`);
+      [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction}, ${secondFilter} ${secondDirection} LIMIT ${limit} OFFSET ${resultsOffset}`);
     } else {
-      [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction} LIMIT ${limit}`);
+      [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction} LIMIT ${limit} OFFSET ${resultsOffset}`);
       console.log(res);
     }
+    console.log(resultsOffset);
     return res;
 
   } catch (error) {
