@@ -8,12 +8,23 @@
    * @param {string} productFilter - What to filter the product by
    */
   const myAction = async (productType, productFilter) => {
-    var config = {
-      method: 'get',
-      url: `http://localhost:5000/products/getSpecificProduct/${productType}/${productFilter}/ASC/5`,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
+    if (productFilter == 'best') {
+      var config = {
+        method: 'get',
+        url: `http://localhost:5000/products/getSpecificProduct/${productType}/rating/DESC/price/ASC/5`,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    } else {
+      var config = {
+        method: 'get',
+        url: `http://localhost:5000/products/getSpecificProduct/${productType}/${productFilter}/ASC/5`,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
       }
     }
 
@@ -35,7 +46,7 @@
     console.log(products)
 
     const carouselItems = products.map(product => ({
-      title: product.titlePayload.slice(0, 2),
+      title: product.titlePayload.split(' ').slice(0, 1),
       subtitle: product.pricePayload,
       image: product.imagePayload
     }))

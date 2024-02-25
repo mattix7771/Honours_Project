@@ -58,7 +58,6 @@ export async function getAll(category){
   category = category.split(',');
   let products = [];
   for (let cat of category) {
-    console.log(cat)
     const [res] = await pool.query(`SELECT * FROM ${cat}`);
     products.push(res);
   }
@@ -72,10 +71,17 @@ export async function getAllFromTable(category){
 }
 
 // Get cheapest phone
-export async function getSpecificProduct(productType, productFilter, direction, limit = 5){
+export async function getSpecificProduct(productType, productFilter, direction, secondFilter, secondDirection, limit = 5){
   try {
-    const [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction} LIMIT ${limit}`);
-    console.log(res);
+
+    let res;
+
+    if (secondFilter && secondDirection){
+      [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction}, ${secondFilter} ${secondDirection} LIMIT ${limit}`);
+    } else {
+      [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction} LIMIT ${limit}`);
+      console.log(res);
+    }
     return res;
 
   } catch (error) {

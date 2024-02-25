@@ -5,12 +5,15 @@ import { getAllProducts , getAllFromTable, getProductsByTitle, getSpecificProduc
 const router = express.Router();
 
 // Get specific product
-router.get('/getSpecificProduct/:productType/:productFilter/:direction(ASC|DESC)/:limit', async (req, res) => {
+router.get('/getSpecificProduct/:productType/:productFilter/:direction(ASC|DESC)/:secondFilter?/:secondDirection(ASC|DESC)?/:limit', async (req, res) => {
   const productType = req.params.productType;
   const productFilter = req.params.productFilter;
   const direction = req.params.direction;
   const limit = req.params.limit;
-  const products = await getSpecificProduct(productType, productFilter, direction, limit);
+  const secondFilter = req.params.secondFilter;
+  const secondDirection = req.params.secondDirection;
+
+  const products = await getSpecificProduct(productType, productFilter, direction, secondFilter, secondDirection, limit);
   res.send(products);
 });
 
