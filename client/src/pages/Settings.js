@@ -10,6 +10,7 @@ const config = await getConfig('all');
 // set up all settings
 const productCategories = Array.from(config.webStore.productCategories.replace(' ', '').split(','));
 const num_products = config.webStore.num_products;
+const slogan_banner = config.webStore.slogan_banner;
 
 const chatbot_name = config.Chatbot.chatbot;
 const chatbot_honesty = config.Chatbot.chatbot_honesty;
@@ -35,9 +36,12 @@ function Settings() {
   });
 
   const [numProducts, setNumProducts] = useState(num_products);
-  const [modelName, setModelName] = useState(model_name);
+  const [sloganBanner, setSloganBanner] = useState(slogan_banner);
+
   const [chatbotName, setChatbotName] = useState(chatbot_name);
   const [honesty, setHonesty] = useState(chatbot_honesty);
+  
+  const [modelName, setModelName] = useState(model_name);
   const [llmMaxTokens, setLlmMaxTokens] = useState(llm_max_tokens);
   const [llmTemperature, setLlmTemperature] = useState(llm_temperature);
   const [llmTopK, setLlmTopK] = useState(llm_top_k);
@@ -68,8 +72,8 @@ function Settings() {
   //   setCheckboxes(restoredCheckboxes);
   // }, []);
 
-  // Function to handle checkbox change
-  const CheckboxChange = (category) => (event) => {
+  // Function to handle checkbox change for product categories
+  const CheckboxChangeCategory = (category) => (event) => {
 
     const val = productCategoriesMap[category];
 
@@ -132,6 +136,8 @@ function Settings() {
   
   return (
     <>
+      {/* WEBSTORE SETTINGS */}
+
       <h2 className='m-10 font-bold text-xl'>Webstore Settings</h2>
       {Object.entries(productCategoriesMap).map(([category, value]) => {
         return(
@@ -141,7 +147,7 @@ function Settings() {
                 type="checkbox"
                 className="sr-only peer"
                 checked={value}
-                onChange={CheckboxChange(category)}
+                onChange={CheckboxChangeCategory(category)}
               />
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
               <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Product Category: {category.charAt(0).toUpperCase() + category.slice(1)}</span>
@@ -157,6 +163,26 @@ function Settings() {
         <input type="range" min="1" max="10" defaultValue={numProducts} class="range" id="num_products" onChange={(e) => {setNumProducts(e.target.value); saveChangeToFile('num_products', e.target.value)}}/>
         <label for="num_products">{numProducts}</label>
       </div>
+
+      <div className='m-10'>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={sloganBanner}
+            onChange={() => {
+              setSloganBanner(!sloganBanner);
+              saveChangeToFile('slogan_banner', !sloganBanner);
+            }}
+          />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
+          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Slogan banner</span>
+        </label>
+        <br/>
+      </div>
+
+
+      {/* CHATBOT SETTINGS */}
 
       <h2 className='m-10 font-bold text-xl'>Chatbot Settings (requires page reload)</h2>
 
@@ -182,6 +208,9 @@ function Settings() {
         setVariable={setHonesty}
         saveChangeToFile={saveChangeToFile}
       />
+
+
+      {/* LLM SETTINGS */}
 
       <h2 className='m-10 font-bold text-xl'>Language Model Settings (requires server restart)</h2>
 

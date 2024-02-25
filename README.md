@@ -31,9 +31,11 @@ Click it and everything will start
 [webStore]
 productCategories = phones, tvs, headphones, laptops, watches ;product categories to show (phones, tvs, headphones, laptops, watches (comma separated))
 num_products = 4 ;number of each product to show on initial page
+slogan_banner = true ;toggle banner
 
 [Chatbot]
 chatbot = toucan-bot ;toucan-bot || toucan-bot-configured || toucan-bot-llm
+honesty = honest ;honest, partial, dishonest
 
 [LLM]
 model = llama-2-7b-chat.Q2_K.gguf ;model to be used (must be present in server/models folder)

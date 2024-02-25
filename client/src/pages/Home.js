@@ -12,6 +12,7 @@ import { logAction, getConfig } from '../util/util';
 const config = await getConfig('webStore');
 const productCategoriesConfig = config.productCategories.split(',');
 const num_products = config.num_products;
+const slogan_banner = config.slogan_banner;
 
 /** 
  * Home component
@@ -85,6 +86,7 @@ function Home() {
     </div>
   ));
 
+    console.log(slogan_banner)
 
   return (
     <div>
@@ -93,7 +95,7 @@ function Home() {
       <Navbar/>
 
       {/* Banner */}
-      <div className='flex bg-[#caf2ff] h-full w-[90vw] m-20 rounded-3xl px-20 items-center'>
+      {slogan_banner && <div className='flex bg-[#caf2ff] h-full w-[90vw] m-20 rounded-3xl px-20 items-center'>
         <div>
           <div className="text-6xl min-w-fit font-serif font-semibold text-gray-800 leading-relaxed pt-32">Tech Made Simple,<br/>Shopping Made Fun.
             <div className='text-2xl pt-36 float-right'>Shop our best sellers here<br/>
@@ -102,7 +104,7 @@ function Home() {
           </div>
         </div>
         <img src={DigitalDevices} className='ml-auto'/>
-      </div>
+      </div>}
 
       {/* Product Categories */}
       {Object.keys(products).map(category => (
