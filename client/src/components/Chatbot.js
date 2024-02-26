@@ -5,6 +5,7 @@ import { logAction, getConfig } from '../util/util';
 // get chatbot configuration from config file
 const config = await getConfig('Chatbot');
 const chatbot_name = config.chatbot;
+const chatbot_popup = config.chatbot_popup;
 
 /** 
  * Chatbot component
@@ -66,7 +67,12 @@ const Chatbot = () => {
 
 
   return (
-    <>
+    <>   
+      {chatbot_popup && <div className="fixed bottom-10 right-24 flex items-center">
+        <div className="bg-gray-100 shadow-lg text-gray-800 ml-4 px-4 py-2 rounded">
+          Hey there! Need help? <br/>Click here to chat with us!
+        </div>
+      </div>}
       <div id="webchat" />
     </>
   )

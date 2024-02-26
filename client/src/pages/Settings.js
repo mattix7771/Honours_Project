@@ -16,6 +16,7 @@ const sort_show = config.webStore.sort_show;
 
 const chatbot_name = config.Chatbot.chatbot;
 const chatbot_honesty = config.Chatbot.chatbot_honesty;
+const chatbot_popup = config.Chatbot.chatbot_popup;
 
 const model_name = config.LLM.model;
 const llm_max_tokens = config.LLM.llm_max_tokens;
@@ -44,6 +45,7 @@ function Settings() {
   const [chatbotName, setChatbotName] = useState(chatbot_name);
   const [chatbotShow, setChatbotShow] = useState(chatbot_show);
   const [honesty, setHonesty] = useState(chatbot_honesty);
+  const [chatbotPopup, setChatbotPopup] = useState(chatbot_popup);
   
   const [modelName, setModelName] = useState(model_name);
   const [llmMaxTokens, setLlmMaxTokens] = useState(llm_max_tokens);
@@ -246,6 +248,23 @@ function Settings() {
         setVariable={setHonesty}
         saveChangeToFile={saveChangeToFile}
       />
+
+      <div className='m-10'>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={chatbotPopup}
+            onChange={() => {
+              setChatbotPopup(!chatbotPopup);
+              saveChangeToFile('chatbot_popup', !chatbotPopup);
+            }}
+          />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
+          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Show Chatbot Popup</span>
+        </label>
+        <br/>
+      </div>
 
 
       {/* LLM SETTINGS */}
