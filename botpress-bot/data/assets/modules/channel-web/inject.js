@@ -1,7 +1,7 @@
 // full backward compatibility
-const DEFAULT_CHAT_ID = 'bp-web-widget'
-const DEFAULT_IFRAME_ID = 'bp-widget'
-const DEFAULT_IFRAME_CLASS = 'bp-widget-web'
+var DEFAULT_CHAT_ID = 'bp-web-widget'
+var DEFAULT_IFRAME_ID = 'bp-widget'
+var DEFAULT_IFRAME_CLASS = 'bp-widget-web'
 
 function _getContainerId(chatId) {
   return chatId ? chatId + '-container' : DEFAULT_CHAT_ID
@@ -46,7 +46,7 @@ function _generateIFrameHTML(host, config) {
   )
 }
 
-const chatRefs = {}
+var chatRefs = {}
 
 // provides proper chat reference
 function _getChatRef(chatId) {
