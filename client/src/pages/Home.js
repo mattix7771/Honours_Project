@@ -13,6 +13,7 @@ const config = await getConfig('webStore');
 const productCategoriesConfig = config.productCategories.split(',');
 const num_products = config.num_products;
 const slogan_banner = config.slogan_banner;
+const chatbot_show = config.chatbot_show;
 
 /** 
  * Home component
@@ -119,7 +120,7 @@ function Home() {
       ))}
 
       {/* Chatbot */}
-      <Chatbot />
+      {chatbot_show && < Chatbot />}
         
       {/* Footer */}
       <Footer />

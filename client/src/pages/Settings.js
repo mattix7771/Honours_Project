@@ -11,6 +11,7 @@ const config = await getConfig('all');
 const productCategories = Array.from(config.webStore.productCategories.replace(' ', '').split(','));
 const num_products = config.webStore.num_products;
 const slogan_banner = config.webStore.slogan_banner;
+const chatbot_show = config.webStore.chatbot_show;
 
 const chatbot_name = config.Chatbot.chatbot;
 const chatbot_honesty = config.Chatbot.chatbot_honesty;
@@ -39,6 +40,7 @@ function Settings() {
   const [sloganBanner, setSloganBanner] = useState(slogan_banner);
 
   const [chatbotName, setChatbotName] = useState(chatbot_name);
+  const [chatbotShow, setChatbotShow] = useState(chatbot_show);
   const [honesty, setHonesty] = useState(chatbot_honesty);
   
   const [modelName, setModelName] = useState(model_name);
@@ -185,6 +187,23 @@ function Settings() {
       {/* CHATBOT SETTINGS */}
 
       <h2 className='m-10 font-bold text-xl'>Chatbot Settings (requires page reload)</h2>
+
+      <div className='m-10'>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={chatbotShow}
+            onChange={() => {
+              setChatbotShow(!chatbotShow);
+              saveChangeToFile('chatbot_show', !chatbotShow);
+            }}
+          />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
+          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Show Chatbot</span>
+        </label>
+        <br/>
+      </div>
 
       <h2 className='mx-10 my-5'>Chatbot name</h2>
       <div className='relative'>
