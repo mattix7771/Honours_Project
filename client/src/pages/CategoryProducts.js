@@ -5,12 +5,16 @@ import Product from '../components/Product';
 import ReactPaginate from 'react-paginate';
 import { Button, IconButton } from '@material-tailwind/react';
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { logAction, getProductsByTitle } from '../util/util';
+import { logAction, getProductsByTitle, getConfig } from '../util/util';
 import angle_down from '../resources/angle down.png'; //Free image from freepik.com
+
+// get product configuration from config file
+const config = await getConfig('webStore');
+const sort_show = config.sort_show;
 
 function CategoryProducts() {
 
-  console.log(useParams());
+  const [sortShow, setSortShow] = useState(sort_show);
 
   const category = useParams().category;
   const [products, setProducts] = useState([]);
@@ -155,7 +159,7 @@ function CategoryProducts() {
       </div>
 
       
-      <div className='relative my-10'>
+      { sortShow && <div className='relative my-10'>
         <div className=' w-64 mx-10 border-solid border-gray-400 border-2 px-5 py-2 rounded cursor-pointer font-bold hover:bg-gray-100' onClick={toggleDropdown}>Sort by: {filter}
           <img src={angle_down} className='h-5 w-5 float-right mt-0.5'/>
         </div>
@@ -166,7 +170,7 @@ function CategoryProducts() {
             <div className='hover:bg-gray-100 cursor-pointer p-4' onClick={() => updateDropdown('Highest rating')}>Highest Rating</div>
             <div className='hover:bg-gray-100 cursor-pointer p-4' onClick={() => updateDropdown('Lowest rating')}>Lowest Rating</div>
           </div>
-      </div>
+      </div>}
       
 
 

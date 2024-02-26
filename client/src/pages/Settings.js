@@ -12,6 +12,7 @@ const productCategories = Array.from(config.webStore.productCategories.replace('
 const num_products = config.webStore.num_products;
 const slogan_banner = config.webStore.slogan_banner;
 const chatbot_show = config.webStore.chatbot_show;
+const sort_show = config.webStore.sort_show;
 
 const chatbot_name = config.Chatbot.chatbot;
 const chatbot_honesty = config.Chatbot.chatbot_honesty;
@@ -38,6 +39,7 @@ function Settings() {
 
   const [numProducts, setNumProducts] = useState(num_products);
   const [sloganBanner, setSloganBanner] = useState(slogan_banner);
+  const [sortShow, setSortShow] = useState(sort_show);
 
   const [chatbotName, setChatbotName] = useState(chatbot_name);
   const [chatbotShow, setChatbotShow] = useState(chatbot_show);
@@ -179,6 +181,23 @@ function Settings() {
           />
           <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
           <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Slogan banner</span>
+        </label>
+        <br/>
+      </div>
+
+      <div className='m-10'>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={sortShow}
+            onChange={() => {
+              setSortShow(!sortShow);
+              saveChangeToFile('sort_show', !sortShow);
+            }}
+          />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
+          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Show Sorting Dropdown</span>
         </label>
         <br/>
       </div>
