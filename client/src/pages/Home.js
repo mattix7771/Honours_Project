@@ -13,7 +13,7 @@ const config = await getConfig('webStore');
 const productCategoriesConfig = config.productCategories.split(',');
 const num_products = config.num_products;
 const slogan_banner = config.slogan_banner;
-const chatbot_show = config.chatbot_show;
+let chatbot_show = config.chatbot_show;
 
 /** 
  * Home component
@@ -21,6 +21,7 @@ const chatbot_show = config.chatbot_show;
  */ 
 function Home() {
 
+  console.log("chatbotShow"+chatbot_show)
   // Local product storage
   const [products, setProducts] = useState({});
 
@@ -77,7 +78,7 @@ function Home() {
   // Display products
   const displayProducts = (products) => products
   .map((product, index) => (
-    <div key={index} onClick={() => logAction(`product clicked: ${product.name}`, 2 )}>
+    <div key={index} onClick={() => {logAction(`product clicked: ${product.name}`, 2 ); chatbot_show = false;}}>
       <Product
         name={product.name}
         price={product.price}
