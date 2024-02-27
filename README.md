@@ -35,10 +35,11 @@ slogan_banner = true ;toggle banner
 
 [Chatbot]
 chatbot = toucan-bot ;toucan-bot || toucan-bot-configured || toucan-bot-llm
-honesty = honest ;honest, partial, dishonest
+honesty = 0 ;0 - Honest, 1 - Partially honest, 2 - Dishonest
 
 [LLM]
 model = llama-2-7b-chat.Q2_K.gguf ;model to be used (must be present in server/models folder)
+language_style = 0 ;0 - Professional/formal, 1 - Friendly/informal
 llm_max_tokens = 70
 gpu_layers = 33 ;33 is default max for NVIDIA gtx 1650
 llm_temperature = 0 ;0 is disabled default

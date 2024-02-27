@@ -6,13 +6,14 @@ import { getSpecificProduct } from './database.js';
 import { LlamaModel, LlamaContext, LlamaChatSession } from 'node-llama-cpp';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// get chatbot configuration from config file
+// get LLM configuration from config file
 const configFilePath = path.join(__dirname, "../init_config.ini");
 const config = ini.parse(fs.readFileSync(configFilePath, 'utf-8'));
 const chatbotConfig = config.LLM;
 
-// set up chatbot configuration
+// set up LLM configuration
 const model_name = chatbotConfig.model;
+const language_style = parseInt(chatbotConfig.language_style);
 const llm_max_tokens = parseInt(chatbotConfig.llm_max_tokens);
 const gpu_layers = parseInt(chatbotConfig.gpu_layers);
 const llm_temperature = parseInt(chatbotConfig.llm_temperature);
@@ -21,7 +22,6 @@ const llm_top_p = parseInt(chatbotConfig.llm_top_p);
 
 // Initialize the Llama Model
 const modelPath = path.join(__dirname, "models", model_name);
-// const model = new LlamaModel({ modelPath });
 const model = new LlamaModel({
   modelPath,
   gpuLayers: gpu_layers,
@@ -38,14 +38,12 @@ async function addKnowledgeToModel(){
   const knowledge = fs.readFileSync('starting_context.txt', 'utf-8');
   const lines = knowledge.split(/\r?\n/);
 
-  for (const line of lines) {
-    session.prompt(line);
-  }
+  await session.prompt(lines[language_style+1]);
+
   console.log("llama_knowledge_added_to_model");
 }
 
 addKnowledgeToModel();
-
 
 
 
@@ -100,7 +98,7 @@ export async function handleRequest(res, userPrompt){
      if(userPromptCategory && userPromptFilter && direction){
       suggestedProduct = await getSpecificProduct(userPromptCategory, userPromptFilter, direction, limit);
       suggestedProductString = suggestedProduct[0].name.split(' ').slice(0,5).join(' ') + " £" + suggestedProduct[0].price + " " + suggestedProduct[0].rating.split(' ').slice(0,1) + " stars";
-      const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + suggestedProductString, {
+      const reply = session.prompt(userPrompt + "\" suggested products: " + suggestedProductString, {
         maxTokens: llm_max_tokens,
         temperature: llm_temperature,
         topK: llm_top_k,
@@ -111,7 +109,7 @@ export async function handleRequest(res, userPrompt){
     } else if(userPromptCategory){
       suggestedProduct = await getSpecificProduct(userPromptCategory, "price", "ASC", limit);
       suggestedProductString = suggestedProduct[0].name.split(' ').slice(0,5).join(' ') + " £" + suggestedProduct[0].price + " " + suggestedProduct[0].rating.split(' ').slice(0,1) + " stars";
-      const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + suggestedProductString, {
+      const reply = session.prompt(userPrompt + "\" suggested products: " + suggestedProductString, {
         maxTokens: llm_max_tokens,
         temperature: llm_temperature,
         topK: llm_top_k,
@@ -120,7 +118,7 @@ export async function handleRequest(res, userPrompt){
       console.log("user prompt: " + userPrompt + " suggested products: " + suggestedProductString)
       return reply;
     } else {
-      const reply = session.prompt("user prompt: \"" + userPrompt + "\"", {
+      const reply = session.prompt(userPrompt + "\"", {
         maxTokens: llm_max_tokens,
         temperature: llm_temperature,
         topK: llm_top_k,

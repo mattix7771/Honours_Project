@@ -19,6 +19,7 @@ const chatbot_honesty = config.Chatbot.chatbot_honesty;
 const chatbot_popup = config.Chatbot.chatbot_popup;
 
 const model_name = config.LLM.model;
+const language_style = config.LLM.language_style;
 const llm_max_tokens = config.LLM.llm_max_tokens;
 const llm_temperature = config.LLM.llm_temperature;
 const llm_top_k = config.LLM.llm_top_k;
@@ -48,6 +49,7 @@ function Settings() {
   const [chatbotPopup, setChatbotPopup] = useState(chatbot_popup);
   
   const [modelName, setModelName] = useState(model_name);
+  const [languageStyle, setLanguageStyle] = useState(language_style);
   const [llmMaxTokens, setLlmMaxTokens] = useState(llm_max_tokens);
   const [llmTemperature, setLlmTemperature] = useState(llm_temperature);
   const [llmTopK, setLlmTopK] = useState(llm_top_k);
@@ -274,6 +276,17 @@ function Settings() {
       <h2 className='mx-10 my-5'>Model name (must be a valid model present in server/models)</h2>
       <input type='text' defaultValue={modelName} className='border-solid border-gray-400 border-2 px-5 py-2 rounded mx-10' onChange={(e) => {setModelName(e.target.value); saveChangeToFile('model', e.target.value)}}/>
       
+      <Slider
+        id='language_style'
+        title='Language Style (0 - Formal, 1 - Informal)'
+        min='0'
+        max='1'
+        step='1'
+        defaultValue={languageStyle}
+        setVariable={setLanguageStyle}
+        saveChangeToFile={saveChangeToFile}
+      />
+
       <Slider
         id='llm_max_tokens'
         title='Max tokens'
