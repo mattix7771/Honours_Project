@@ -2,10 +2,16 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { logAction } from '../util/util';
 
+/**
+ * Basket Page
+ * Shows user all products in basket and allows them to be removed
+ */
 function Basket() {
 
+  // Products in basket
   const [products, setProducts] = useState([{}]);
 
+  // API call to get all the products added to basket
   useEffect(() => {
     fetch('/basket/getBasket')
       .then((res) => res.json())
@@ -17,6 +23,7 @@ function Basket() {
       });
   }, []);
 
+  // API call to remove item from basket
   async function removeItem(name) {
     try {
       fetch('/basket/removeFromBasket', {
@@ -41,14 +48,17 @@ function Basket() {
       console.error('Error:', error);
     }
 
-    // Reload page
+    // Reload page to update basket
     window.location.reload();
   }
 
+
   return (
     <>
+      {/* Navbar */}
       <Navbar />
 
+      {/* Product */}
       <div className='m-2'>
         {products.map((product, index) => (
             <div key={index} className='inline-flex'>

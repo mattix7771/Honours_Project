@@ -1,15 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+/**
+ * Product Component
+ * A card to show the product and all its attributes
+ */
 function Product(props) {
+
+  // Ensure product's attributes are all valid
   if (props.name == undefined || props.price == undefined || props.image == undefined || props.rating == undefined) {
     return 0;
   } else{
-
+  
+    // Round rating
     const starCount = Math.round(props.rating.split(' ').slice(0,1));
+
+
     return (
       <div className='w-64 h-80 m-4 mb-14'>
         
+        {/* Picture (link to ProductDetails page) */}
         <Link
           to={`/product_details/${encodeURIComponent(props.name)}`}
           state = {{
@@ -25,7 +35,7 @@ function Product(props) {
           </div>
         </Link>
 
-
+        {/* Product Info */}
         <div className='px-5 py-2'>
           <a className='font-bold'>{props.name.split(' ').slice(0, 1).join(' ')}</a><br/>
           <a>{props.name.split(' ').slice(1, 7).join(' ')}</a><br/>

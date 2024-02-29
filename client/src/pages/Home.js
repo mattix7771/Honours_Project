@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 import { logAction, getConfig } from '../util/util';
 
 
-// get product configuration from config file
+// Get webstore configurations from config file
 const config = await getConfig('webStore');
 const productCategoriesConfig = config.productCategories.split(',');
 const num_products = config.num_products;
@@ -16,12 +16,11 @@ const slogan_banner = config.slogan_banner;
 let chatbot_show = config.chatbot_show;
 
 /** 
- * Home component
+ * Home Page
  * Entry point of the application.
  */ 
 function Home() {
 
-  console.log("chatbotShow"+chatbot_show)
   // Local product storage
   const [products, setProducts] = useState({});
 
@@ -48,13 +47,14 @@ function Home() {
   //   fetchProductCatogories();
   // }, []);
 
-  // Fetch all products by category
+  // API call to fetch all products by category
   useEffect(() => {
     try{
       const fetchProductsByCategory = async () => {
       
         const fetchedProducts = {};
 
+        // Get all products from each table in database
         for(let category of productCategories){
           const response = await fetch(`/products/category/${category}_backlog`);
           const productsData = await response.json();
@@ -69,13 +69,12 @@ function Home() {
     }
   }, []);
 
-  // Log starting page action
+  // Log starting page action upon opening page
   useEffect(() => {
     logAction('Opened starting page', 1);
   }, []);
   
-
-  // Display products
+  // Display all products by category
   const displayProducts = (products) => products
   .map((product, index) => (
     <div key={index} onClick={() => {logAction(`product clicked: ${product.name}`, 2 ); chatbot_show = false;}}>
@@ -88,7 +87,6 @@ function Home() {
     </div>
   ));
 
-    console.log(slogan_banner)
 
   return (
     <div>

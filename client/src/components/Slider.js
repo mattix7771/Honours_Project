@@ -1,7 +1,12 @@
 import React from "react";
 
+/**
+ * Slider component
+ * Responsible for creating a slider based on configurations
+ */
 function Slider(props) {
 
+	// slider properties
 	const id = props.id;
 	const title = props.title;
 	const min = props.min;
@@ -11,8 +16,11 @@ function Slider(props) {
 	const setVariable = props.setVariable;
 	const saveChangeToFile = props.saveChangeToFile;
 
+
   return (
     <div>
+
+			{/* Slider */}
       <h2 className='mx-10 my-5'>{title}</h2>
       <div className='mx-10'>
         <input 
@@ -30,6 +38,7 @@ function Slider(props) {
 				/>
         <label for="slider">{defaultValue}</label>
       </div>
+
     </div>
   );
 }

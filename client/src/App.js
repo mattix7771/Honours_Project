@@ -6,6 +6,10 @@ import Settings from './pages/Settings';
 import ProductDetails from './pages/ProductDetails';
 import CategoryProducts from './pages/CategoryProducts';
 
+/**
+ * Router
+ * Responsible for the application's naviagtion
+ */
 function App() {
 
   return (

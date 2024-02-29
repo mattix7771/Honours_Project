@@ -45,3 +45,21 @@ gpu_layers = 33 ;33 is default max for NVIDIA gtx 1650
 llm_temperature = 0 ;0 is disabled default
 llm_top_k = 0 ;0 is disabled default
 llm_top_p = 1 ;1 is disabled default
+
+const productCategories = Array.from(config.webStore.productCategories.replace(' ', '').split(','));
+const num_products = config.webStore.num_products;
+const slogan_banner = config.webStore.slogan_banner;
+const chatbot_show = config.webStore.chatbot_show;
+const sort_show = config.webStore.sort_show;
+
+const chatbot_name = config.Chatbot.chatbot;
+const chatbot_honesty = config.Chatbot.chatbot_honesty;
+const chatbot_popup = config.Chatbot.chatbot_popup;
+
+const model_name = config.LLM.model;
+const language_style = config.LLM.language_style;
+const llm_max_tokens = config.LLM.llm_max_tokens;
+const llm_temperature = config.LLM.llm_temperature;
+const llm_top_k = config.LLM.llm_top_k;
+const llm_top_p = config.LLM.llm_top_p;
+const gpu_layers = config.LLM.gpu_layers;

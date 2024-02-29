@@ -8,28 +8,40 @@ import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { logAction, getProductsByTitle, getConfig } from '../util/util';
 import angle_down from '../resources/angle down.png'; //Free image from freepik.com
 
-// get product configuration from config file
+// Get webstore.sort_show configuration from config file
 const config = await getConfig('webStore');
 const sort_show = config.sort_show;
 
+/**
+ * CategoryProducts Page
+ * Responsible for showing products results by category, from searches, and from chatbot reccomendations
+ */
 function CategoryProducts() {
 
+  // webstore.sort_show configuration
   const [sortShow, setSortShow] = useState(sort_show);
 
+  // Products to show and page attrbutes
   const category = useParams().category;
   const [products, setProducts] = useState([]);
   const [rerender, setRerender] = useState(false);
   const [title, setTitle] = useState('');
 
+  // Paginations setup
 	const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 24;
   const pageCount = Math.ceil(products.length / itemsPerPage);
 
+  // Starting state of sorting dropdown
   const [filter, setFilter] = useState('Relevance');
 
-
+  /**
+   * API call to fetch products by title
+   */
   async function fetchDataFromSearch(){
     try{
+
+      // Get API response and assign it to products variable
       const p = await getProductsByTitle(category);
       setProducts(p[0]);
     } catch (error) {
@@ -37,8 +49,14 @@ function CategoryProducts() {
     }
   }
 
+  /**
+   * API call to fetch product reccomendations
+   * @param {String[]} productDetails the details of the products to get from API (category and filter)
+   */
   async function fetchRecommendedProducts(productDetails){
     try{
+
+      // API call to fetch product reccomendations
       const response = await fetch(`/products/getSpecificProduct/${productDetails[0]}/${productDetails[1]}/ASC/5`, {
         method: 'GET',
         headers: {
@@ -46,9 +64,8 @@ function CategoryProducts() {
         },
       });
       
-
+      // Get API response and assign it to products variable
       const data = await response.json();
-      console.log(data);
       setProducts(data);
       
     } catch (error) {
@@ -56,26 +73,31 @@ function CategoryProducts() {
     }
   };
 
+  // Check whether this page was triggered from navbar search, category, or webchat
   useEffect(() => {
     const fetchRelevantProducts = async () => {
-      if(category.includes('[')){
 
+      // Webchat reccomendations
+      if(category.includes('[')){
         const productDetails = JSON.parse(category);
         fetchRecommendedProducts(productDetails);
-
         setTitle("Recommended products");
 
-        
+      // Product search
       } else if(category != 'phones' && category != 'watches' && category != 'laptops' && category != 'headphones' && category != 'tvs'){
         try{
+
           const p = fetchDataFromSearch();
           setTitle("Search results: " + category)
           setRerender(prev => !prev);
+
         } catch (error) {
           console.error('Fetch error:', error);
         }
+
+      // Products by category
       } else{
-        // Fetch relevant category products
+        // API call to fetch relevant category products
         try{
           const response = await fetch(`/products/category/${category}_backlog`, {
             method: 'GET',
@@ -84,14 +106,11 @@ function CategoryProducts() {
             },
           });
 
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-
+          // Get API response and assign it to products variable
           const data = await response.json();
           setProducts(data);
-
           setTitle("Category: " + category);
+
         } catch (error) {
           console.error('Fetch error:', error);
         }
@@ -100,10 +119,12 @@ function CategoryProducts() {
     fetchRelevantProducts();
   }, [category]);
 
+  // Log action upon opening the page
   useEffect(() => {
     logAction(`opened ${category} product category`, 6);
   }, []);
 
+  // Display all products in products variable
 	const displayProducts = () => products
   .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
 	.map((product, index) => (
@@ -117,20 +138,28 @@ function CategoryProducts() {
 		</div>
 	));
   
-	function paginateItems(itemsPerPage){
-    setCurrentPage(itemsPerPage.selected);
-  }
+	// function paginateItems(itemsPerPage){
+  //   setCurrentPage(itemsPerPage.selected);
+  // }
 
+  /**
+   * Toggles opening and closing the product sorting dropdown
+   */
   function toggleDropdown(){
     const dropdown = document.getElementById('chatbotDropdown');
     dropdown.classList.toggle('hidden');
   }
 
+  /**
+   * Updates the filtering options and toggles the dropdown
+   * @param {String} filter the order in which the products should be sorted
+   */
   function updateDropdown(filter){
     setFilter(filter);
     toggleDropdown();
   }
 
+  // Sorts the products based on filter variable and assigns it to products variable
   useEffect(() => {
 
     let sortedProducts = [...products];
@@ -149,16 +178,20 @@ function CategoryProducts() {
     setProducts(sortedProducts);
 
   }, [filter]);
-  
+
 
   return (
     <>
+
+      {/* Navbar */}
       <Navbar />
+
+      {/* Title */}
       <div className="flex justify-center items-center">
           <h1 className="text-6xl font-bold text-indigo-950">{title}</h1>
       </div>
 
-      
+      {/* Sort Dropdown */}
       { sortShow && <div className='relative my-10'>
         <div className=' w-64 mx-10 border-solid border-gray-400 border-2 px-5 py-2 rounded cursor-pointer font-bold hover:bg-gray-100' onClick={toggleDropdown}>Sort by: {filter}
           <img src={angle_down} className='h-5 w-5 float-right mt-0.5'/>
@@ -172,12 +205,12 @@ function CategoryProducts() {
           </div>
       </div>}
       
-
-
+      {/* Products */}
       <div className='grid grid-cols-auto-fit-100'>
         {displayProducts()}
       </div>
       
+      {/* Pagination Bar */}
       <div className="flex gap-4 my-4 mx-96 p-4 justify-center bg-blue-100 rounded-xl">
         <Button
           variant="text"

@@ -17,11 +17,6 @@ export function logAction(message, code){
 			body: JSON.stringify({ log: message, code: code }),
 		});
 
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
-
-		console.log('Log successfully sent.');
 	} catch (error) {
 		console.error('Error:', error.message);
 	}
@@ -31,10 +26,9 @@ export function logAction(message, code){
  * API call to get products by category
  * @function
  * @param {string} category - The category to search for.
- * @returns {object} - The products found.
+ * @returns {object} - The products retrieved.
  */
 export async function getProductsByTitle(productTitle){
-
 	try {
 		const response = await fetch(`/products/${productTitle}`, {
 		  method: 'GET',
@@ -42,13 +36,8 @@ export async function getProductsByTitle(productTitle){
 			'Content-Type': 'application/json',
 		  },
 		});
-	
-		if (!response.ok) {
-		  throw new Error('Network response was not ok');
-		}
 
 		const data = await response.json();
-	
 		return data;
   
 	} catch (error) {
@@ -72,10 +61,6 @@ export async function getConfig(section){
 		const response = await fetch(`/config`, {
 			method: 'GET'
 		});
-
-		if (!response.ok) {
-			throw new Error('Network response was not ok');
-		}
 
 		const config = ini.parse(await response.text(), 'utf-8');
 

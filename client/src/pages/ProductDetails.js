@@ -3,19 +3,25 @@ import { useLocation, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { logAction } from '../util/util';
 
+/**
+ * ProductDetails Page
+ * A more detailed view of all the product's features
+ */
 function ProductDetails() {
   
+  // Get product's attributes
   const location = useLocation();
   const { id } = useParams();
   const { title, name, price, image, rating } = location.state;
-
   let productInfo = JSON.stringify({ name, price, image });
-  console.log(productInfo);
-  console.log(JSON.stringify({ name: name, price: price, image: image }));
-
+  
+  /**
+   * Add product to basket
+   */
   async function addToCart() {
-    // Add to cart through basket API
     try {
+
+      // API call to add product to basket with its respective attributes
       fetch('/basket/addToBasket', {
         method: 'POST',
         headers: {
@@ -24,40 +30,41 @@ function ProductDetails() {
         body: JSON.stringify({ name, price, image }),
       })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        else{
+        if (res.ok) {
+
+          // Show successfully added to cart alert
           const alert = document.getElementById('alert');
           alert.classList.remove('hidden');
         }
         return res.json();
       })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     } catch (error) {
       console.error('Error:', error);
     }
     
-    // Log action
+    // Log ading product to card action
     logAction(`product added to basket: ${name}`, 3);
   }
   
 
-  
-
   return (
     <>
+
+      {/* Navbar */}
       <Navbar />
 
+      {/* Alert */}
       <div class="flex bg-blue-100 border m-4 w-96 justify-center align-middle border-blue-500 text-blue-700 px-4 py-3 hidden" role="alert" id='alert'>
         <p class="font-bold">Product successfully added to cart!</p>
       </div>
 
+      {/* Product Info */}
       <div className='inline-flex m-10 '>
         <img src={image} className='max-h-full min-h-[50vh]'/>
         <div className='mx-20 my-6'>
@@ -72,6 +79,7 @@ function ProductDetails() {
           </button>
         </div>
       </div>
+
     </>
   );
 }

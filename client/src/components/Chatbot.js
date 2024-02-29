@@ -10,12 +10,13 @@ const chatbot_popup = config.chatbot_popup;
 /** 
  * Chatbot component
  * Responsible for chatbot initialisation and event handling
- */ 
+ */
 const Chatbot = () => {
 
   const [chatbotLoaded, setChatbotLoaded] = useState(false);
   const navigate = useNavigate();
 
+  // Chatbot initialisation
   useEffect(() => {
     
     const existingChatbotButton = document.querySelector('.bpw-widget-btn');
@@ -36,11 +37,10 @@ const Chatbot = () => {
     }
   }, [chatbotLoaded]);
 
+  // Once chatbot loaded, listen for chat events and log them
   useEffect(() => {
     if(chatbotLoaded){
-      console.log('Chatbot loaded');
       window.addEventListener("message", function(event) {
-        //console.log(event);
         if (event.data.name === "webchatOpened") {
           logAction("Chatbot opened", 10);
         } else if (event.data.name === "webchatClosed") {
@@ -64,18 +64,19 @@ const Chatbot = () => {
   }, [chatbotLoaded]);
 
 
-
-
   return (
     <>   
+      {/* Webchat */}
+      <div id="webchat" />
+
+      {/* Popup */}
       {chatbot_popup && <div className="fixed bottom-10 right-24 flex items-center">
         <div className="bg-gray-100 shadow-lg text-gray-800 ml-4 px-4 py-2 rounded">
           Hey there! Need help? <br/>Click here to chat with us!
         </div>
       </div>}
-      <div id="webchat" />
     </>
   )
 }
- 
+
 export default Chatbot
