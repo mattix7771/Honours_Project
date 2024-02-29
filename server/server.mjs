@@ -35,6 +35,7 @@ fs.appendFile(logDir, '\r\n' + `${sessionStart.toLocaleTimeString()},0s,0,sessio
 //   }
 // });
 
+// Endpoint to log user movements throughout the application
 app.post('/log', async (req, res) => {
   const actionTime = new Date();
   const log = req.body.log;
@@ -49,7 +50,7 @@ app.use('/products', productRoutes);
 // Set up basket routes
 app.use('/basket', basketRoutes);
 
-// API endpoint to handle LLM chat requests
+// Endpoint to handle LLM chat requests
 app.post('/chat', async (req, res) => {
   const userPrompt = req.body.prompt;
   const date1 = new Date();
@@ -59,24 +60,27 @@ app.post('/chat', async (req, res) => {
   res.send({ reply });
 });
 
+// Endpoint to read configuration file
 app.get('/config', (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
   res.sendFile(path.join(__dirname, '../init_config.ini'));
 });
 
+// Endpoint to write to configuration file
 app.post('/configWrite', (req, res) => {
+
+  // Get variable to change and new value
   const variable = req.body.variable;
   const value = req.body.value;
   
   const file = fs.readFileSync(path.join(__dirname, '../init_config.ini'), 'utf8');
-
   const config = file.replace(new RegExp(`${variable} = .+`), `${variable} = ${value}`);
-
   fs.writeFile(path.join(__dirname, '../init_config.ini'), config, err => {if(err) {console.error(err)}});
   
   res.sendStatus(200);
 });
 
+// Setup Express on port 5000 or port specified in .env file
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

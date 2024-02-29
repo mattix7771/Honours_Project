@@ -15,7 +15,10 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DATABASE
 }).promise();
 
-// Get all products from database
+/**
+ * Retrieve all products from database
+ * @returns all products from database
+ */
 export async function getAllProducts() {
   try {
     const [tableList] = await pool.query('SHOW TABLES');
@@ -36,7 +39,11 @@ export async function getAllProducts() {
   }
 }
 
-// Get products by title
+/**
+ * Retrieve all products with a matching title
+ * @param {String} title the string to match any product title with
+ * @returm all matching products
+ */
 export async function getProductsByTitle(title){
   try {
     const [tableList] = await pool.query('SHOW TABLES');
@@ -68,13 +75,26 @@ export async function getAll(category){
   return products;
 }
 
-// Get all products by category
+/**
+ * Retrieve all products from a table
+ * @param {String} category The category/table to retrieve
+ * @returns all products within a table
+ */
 export async function getAllFromTable(category){
   const [res] = await pool.query(`SELECT * FROM ${category}`);
   return res;
 }
 
-// Get cheapest phone
+/**
+ * Get specific product/s based on parameters
+ * @param {String} productType The type of product (eg. phones, tvs)
+ * @param {String} productFilter What to filter the table by (eg. price)
+ * @param {String} direction The direction of the filter (ASC or DESC)
+ * @param {String} secondFilter Second filter
+ * @param {String} secondDirection Direction for second filter
+ * @param {String} limit The limit of the results (default = 5)
+ * @returns matching products
+ */
 export async function getSpecificProduct(productType, productFilter, direction, secondFilter, secondDirection, limit = 5){
   
   // get honesty configuration from config file
@@ -95,7 +115,6 @@ export async function getSpecificProduct(productType, productFilter, direction, 
   }
 
   try {
-
     let res;
 
     if (secondFilter && secondDirection){

@@ -4,8 +4,10 @@ import { getAllProducts , getAllFromTable, getProductsByTitle, getSpecificProduc
 // Product routes
 const router = express.Router();
 
-// Get specific product
+// Get specific products
 router.get('/getSpecificProduct/:productType/:productFilter/:direction(ASC|DESC)/:secondFilter?/:secondDirection(ASC|DESC)?/:limit', async (req, res) => {
+  
+  // Parameters to retrieve products from database
   const productType = req.params.productType;
   const productFilter = req.params.productFilter;
   const direction = req.params.direction;
@@ -19,15 +21,13 @@ router.get('/getSpecificProduct/:productType/:productFilter/:direction(ASC|DESC)
 
 // Get products by title
 router.get('/:titles', async (req, res) => {
+
   const titles = req.params.titles.split(',');
   
   let products = [];
-
   for (let i = 0; i < titles.length; i++) {
     products.push(await getProductsByTitle(titles[i]));
   }
-
-  console.log(products);
   
   res.send(products);
 });
@@ -40,11 +40,10 @@ router.get('/category/:category', async (req, res) => {
   res.send(products);
 });
 
-// Set up database routes
+// Get all products present in database
 router.get('/', async (req, res) => {
   const products = await getAllProducts();
   res.send(products);
 });
-
 
 export default router;
