@@ -8,6 +8,8 @@
    * @param {string} productFilter - What to filter the product by
    */
   const myAction = async (productType, productFilter) => {
+
+    // Custom API call to get products based on user's choices
     if (productFilter == 'best') {
       var config = {
         method: 'get',
@@ -28,6 +30,7 @@
       }
     }
 
+    // Get producst from API response
     const response = await axios(config)
     const data = response.data
 
@@ -43,8 +46,8 @@
       }
       products.push(item)
     })
-    console.log(products)
 
+    // Create carousel with products and send them to the chat
     const carouselItems = products.map(product => ({
       title: product.titlePayload.split(' ').slice(0, 1),
       subtitle: product.pricePayload,

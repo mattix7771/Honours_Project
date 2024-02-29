@@ -7,6 +7,8 @@
    * @param {string} prompt - message to send to LLM
    */
   const myAction = async prompt => {
+
+    // API call to LLM
     var config = {
       method: 'post',
       url: `http://localhost:5000/chat`,
@@ -17,10 +19,10 @@
       data: { prompt: prompt }
     }
 
+    // get LLM response from API call
     const response = await axios(config)
 
-    console.log(response.data)
-
+    // Send LLM response to chat
     bp.cms.renderElement('builtin_text', { text: response.data.reply, typing: true }, event).then(payloads => {
       bp.events.replyToEvent(event, payloads)
     })
