@@ -35,4 +35,10 @@ router.post('/removeFromBasket', (req, res) => {
   res.json({ success: true, basket });
 });
 
+// Remove all items from basket
+router.post('/removeAll', (req, res) => {
+  basket.splice(0);
+  res.json({ success: true, basket });
+});
+
 export default router;

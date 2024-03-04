@@ -5,7 +5,7 @@ Code 3 - added product to basket
 Code 4 - removed product from basket
 Code 5 - basket page opened
 Code 6 - opened product category
-Code 7 - 
+Code 7 - items purchased
 Code 8 - 
 Code 9 - 
 Code 10 - opened chatbot

@@ -37,12 +37,6 @@ function ProductDetails() {
           alert.classList.remove('hidden');
         }
         return res.json();
-      })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.error(err);
       });
     } catch (error) {
       console.error('Error:', error);

@@ -32,18 +32,7 @@ function Basket() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name }),
-      })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-      })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      });
     } catch (error) {
       console.error('Error:', error);
     }
@@ -52,11 +41,32 @@ function Basket() {
     window.location.reload();
   }
 
+  // API call to finish purchase
+  async function purchaseItems() {
+    try {
+      fetch('/basket/removeAll', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+    // Reload page to update basket
+    window.location.reload();
+  }
 
   return (
     <>
       {/* Navbar */}
       <Navbar />
+
+      {/* Alert */}
+      <div class="flex bg-blue-100 border m-4 w-96 justify-center align-middle border-blue-500 text-blue-700 px-4 py-3 hidden" role="alert" id='alert'>
+        <p class="font-bold">Product successfully added to cart!</p>
+      </div>
 
       {/* Product */}
       <div className='m-2'>
@@ -68,14 +78,23 @@ function Basket() {
               <button 
                 className='bg-blue-300 w-40 h-20 font-bold text-lg' 
                 onClick={() => {
-                  removeItem(product.name)
-                  logAction(`product removed from basket: ${product.name}`, 4)}}>
+                  removeItem(product.name);
+                  logAction(`product removed from basket: ${product.name}`, 4);}}>
                   Remove item
               </button>
             </div>
           ))}
-          
       </div>
+
+      {/* Purchase Button */}
+      <button 
+        className='bg-blue-300 w-40 h-20 font-bold text-lg' 
+        onClick={() => {
+        purchaseItems();
+        logAction(`items purchased ${products}`, 7);
+        document.querySelector("#alert").classList.toggle("hidden")}}>
+        Purchase
+      </button>
     </>
   );
 }
