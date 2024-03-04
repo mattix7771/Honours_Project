@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { Link, redirect, useNavigate  } from 'react-router-dom';
 import toucan from '../resources/toucan.png'; //Free image from freepik.com
-import settings from '../resources/settings.png'; //Free image from freepik.com
 import basket from '../resources/basket.png'; //Free image from freepik.com
 import { logAction } from '../util/util';
 
