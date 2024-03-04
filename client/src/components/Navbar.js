@@ -29,7 +29,7 @@ function Navbar({runQuery}) {
 
       {/* Home Link */}
       <Link to='/'>
-        <img src={toucan} alt="Logo" className='float-left p-2 ml-4 w-28'/>
+        <img src={toucan} alt="Logo" className='float-left p-1 mt-1 ml-4 w-24'/>
       </Link>
 
       {/* Search Bar */}
@@ -45,7 +45,7 @@ function Navbar({runQuery}) {
       </form>
 
       {/* Basket Link */}
-      <Link to='/basket' className='float-right self-center p-2 m-2 mx-2 w-24 h-full'>
+      <Link to='/basket' className='float-right self-center p-1 m-2 mx-6 w-20 h-full'>
         <button onClick={() => logAction('Basket opened', 5)}>
           <img src={basket}/>
         </button>

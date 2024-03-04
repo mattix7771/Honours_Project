@@ -99,18 +99,18 @@ function Home() {
         <div>
           <div className="text-6xl min-w-fit font-serif font-semibold text-gray-800 leading-relaxed pt-32">Tech Made Simple,<br/>Shopping Made Fun.
             <div className='text-2xl pt-36 float-right'>Shop our best sellers here<br/>
-              <button className='bg-[#9ce6ff] ml-[50%]' onClick={() => {window.scrollTo({top: 1000, behavior: "smooth"})}}>View</button>
+              <button className='bg-[#a4e6fc] ml-[70%] rounded-lg p-2 my-3' onClick={() => {window.scrollTo({top: 1000, behavior: "smooth"})}}>View</button>
             </div>
           </div>
         </div>
-        <img src={DigitalDevices} className='ml-auto'/>
+        <img src={DigitalDevices} className='ml-auto w-[550px]'/>
       </div>}
 
       {/* Product Categories */}
       {Object.keys(products).map(category => (
         <div key={category}>
           <div className='text-4xl font-serif font-semibold text-gray-800 leading-relaxed pt-32 ml-96'>{category.charAt(0).toUpperCase() + category.slice(1,)}
-            <Link to={`/category_products/${category}`} className='text-2xl float-right'>View All</Link>
+            <Link to={`/category_products/${category}`} className='text-2xl float-right mr-80'>View All</Link>
           </div>
           <div className='grid grid-cols-6 ml-96'>
             {displayProducts(products[category].slice(0, num_products))}
