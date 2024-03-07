@@ -30,7 +30,8 @@ const Chatbot = () => {
       script.onload = () => {
         window.botpressWebChat.init({
           host: "http://localhost:3001",
-          botId: chatbot_name
+          botId: chatbot_name,
+          extraStylesheet: '/assets/modules/channel-web/custom.css'
         });
       }
       setChatbotLoaded(true);
