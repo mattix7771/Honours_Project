@@ -3,7 +3,8 @@ const chatOptions = {
   hideWidget: true,
   config: {
     enableReset: true,
-    enableTranscriptDownload: true
+    enableTranscriptDownload: true,
+    extraStylesheet: "/assets/modules/channel-web/custom.css"
   }
 }
 
