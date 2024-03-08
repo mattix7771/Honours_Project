@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getConfig } from '../util/util';
 import Slider from '../components/Slider';
 import angle_down from '../resources/angle down.png' //Free image from freepik.com
+import Switch from '../components/Switch';
 
 // Fetch configurations from config file
 const config = await getConfig('all');
@@ -172,20 +173,13 @@ function Settings() {
       {/* Toggle for all product categories */}
       {Object.entries(productCategoriesMap).map(([category, value]) => {
         return(
-          <div className='m-10' key={category}>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="sr-only peer"
-                checked={value}
-                onChange={CheckboxChangeCategory(category)}
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
-              <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Product Category: {category.charAt(0).toUpperCase() + category.slice(1)}</span>
-            </label>
-            <br/>
-          </div>
-
+          <Switch
+            id={category}
+            title={'Product Category: ' + category.charAt(0).toUpperCase() + category.slice(1)}
+            variable={value}
+            setVariable={CheckboxChangeCategory(category)}
+            saveChangeToFile={saveChangeToFile}
+          />
         );
       })}
 
@@ -197,62 +191,35 @@ function Settings() {
       </div>
 
       {/* Toggle for banner on main page */}
-      <div className='m-10'>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            className="sr-only peer"
-            checked={sloganBanner}
-            onChange={() => {
-              setSloganBanner(!sloganBanner);
-              saveChangeToFile('slogan_banner', !sloganBanner);
-            }}
-          />
-          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
-          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Slogan banner</span>
-        </label>
-        <br/>
-      </div>
+      <Switch
+        id='slogan_banner'
+        title='Slogan banner'
+        variable={sloganBanner}
+        setVariable={setSloganBanner}
+        saveChangeToFile={saveChangeToFile}
+      />
 
       {/* Toggle for product sorting dropdown */}
-      <div className='m-10'>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            className="sr-only peer"
-            checked={sortShow}
-            onChange={() => {
-              setSortShow(!sortShow);
-              saveChangeToFile('sort_show', !sortShow);
-            }}
-          />
-          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
-          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Show Sorting Dropdown</span>
-        </label>
-        <br/>
-      </div>
+      <Switch
+        id='sort_show'
+        title='Show Sorting Dropdown'
+        variable={sortShow}
+        setVariable={setSortShow}
+        saveChangeToFile={saveChangeToFile}
+      />
 
 
       {/* CHATBOT SETTINGS */}
       <h2 className='m-10 font-bold text-xl'>Chatbot Settings (requires page reload)</h2>
 
       {/* Toggle for chatbot */}
-      <div className='m-10'>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            className="sr-only peer"
-            checked={chatbotShow}
-            onChange={() => {
-              setChatbotShow(!chatbotShow);
-              saveChangeToFile('chatbot_show', !chatbotShow);
-            }}
-          />
-          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
-          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Show Chatbot</span>
-        </label>
-        <br/>
-      </div>
+      <Switch
+        id='chatbot_show'
+        title='Show Chatbot'
+        variable={chatbotShow}
+        setVariable={setChatbotShow}
+        saveChangeToFile={saveChangeToFile}
+      />
 
       {/* Dropdown for which chatbot to use */}
       <h2 className='mx-10 my-5'>Chatbot name</h2>
@@ -280,22 +247,13 @@ function Settings() {
       />
 
       {/* Toogle for chatbot popup */}
-      <div className='m-10'>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            className="sr-only peer"
-            checked={chatbotPopup}
-            onChange={() => {
-              setChatbotPopup(!chatbotPopup);
-              saveChangeToFile('chatbot_popup', !chatbotPopup);
-            }}
-          />
-          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
-          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Show Chatbot Popup</span>
-        </label>
-        <br/>
-      </div>
+      <Switch
+        id='chatbot_popup'
+        title='Show Chatbot Popup'
+        variable={chatbotPopup}
+        setVariable={setChatbotPopup}
+        saveChangeToFile={saveChangeToFile}
+      />
 
 
       {/* LLM SETTINGS */}

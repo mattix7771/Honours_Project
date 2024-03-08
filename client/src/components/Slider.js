@@ -18,13 +18,13 @@ function Slider(props) {
 
 
   return (
-    <div>
+  	<div>
 
 			{/* Slider */}
-      <h2 className='mx-10 my-5'>{title}</h2>
-      <div className='mx-10'>
-        <input 
-					type="range" 
+			<h2 className='mx-10 my-5'>{title}</h2>
+			<div className='mx-10'>
+				<input 
+					type="range"
 					min={min} 
 					max={max} 
 					step={step} 
@@ -36,8 +36,8 @@ function Slider(props) {
 						saveChangeToFile(id, e.target.value)
 					}}
 				/>
-        <label for="slider">{defaultValue}</label>
-      </div>
+				<label for="slider">{defaultValue}</label>
+			</div>
 
     </div>
   );
