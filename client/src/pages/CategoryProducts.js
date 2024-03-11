@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Product from '../components/Product';
-import ReactPaginate from 'react-paginate';
-import { Button, IconButton } from '@material-tailwind/react';
-import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { logAction, getProductsByTitle, getConfig } from '../util/util';
 import angle_down from '../resources/angle down.png'; //Free image from freepik.com
+import PaginatedItems from '../components/Pagination';
 
 // Get webstore.sort_show configuration from config file
 const config = await getConfig('webStore');
@@ -26,11 +24,6 @@ function CategoryProducts() {
   const [products, setProducts] = useState([]);
   const [rerender, setRerender] = useState(false);
   const [title, setTitle] = useState('');
-
-  // Paginations setup
-	const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 24;
-  const pageCount = Math.ceil(products.length / itemsPerPage);
 
   // Starting state of sorting dropdown
   const [filter, setFilter] = useState('Relevance');
@@ -57,7 +50,7 @@ function CategoryProducts() {
     try{
 
       // API call to fetch product reccomendations
-      const response = await fetch(`/products/getSpecificProduct/${productDetails[0]}/${productDetails[1]}/ASC/5`, {
+      const response = await fetch(`/products/getSpecificProduct/${productDetails[0]}/${productDetails[1]}/ASC/5/false`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -124,24 +117,6 @@ function CategoryProducts() {
     logAction(`opened ${category} product category`, 6);
   }, []);
 
-  // Display all products in products variable
-	const displayProducts = () => products
-  .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
-	.map((product, index) => (
-		<div key={index}>
-			<Product
-				name={product.name}
-				price={product.price}
-				rating={product.rating}
-				image={product.image}
-			/>
-		</div>
-	));
-  
-	// function paginateItems(itemsPerPage){
-  //   setCurrentPage(itemsPerPage.selected);
-  // }
-
   /**
    * Toggles opening and closing the product sorting dropdown
    */
@@ -204,59 +179,8 @@ function CategoryProducts() {
             <div className='hover:bg-gray-100 cursor-pointer p-4' onClick={() => updateDropdown('Lowest rating')}>Lowest Rating</div>
           </div>
       </div>}
-      
-      {/* Products */}
-      <div className='grid grid-cols-auto-fit-100'>
-        {displayProducts()}
-      </div>
-      
-      {/* Pagination Bar */}
-      <div className="flex gap-4 my-4 mx-96 p-4 justify-center bg-blue-100 rounded-xl">
-        <Button
-          variant="text"
-          className="flex items-center gap-2"
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-          disabled={currentPage === 0}
-        >
-          <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> PREVIOUS
-        </Button>
 
-        <div className="flex items-center gap-7">
-          {[...Array(pageCount)].map((_, index) => (
-            <IconButton
-              key={index}
-              variant={currentPage === index ? "filled" : "text"}
-              color="gray"
-              onClick={() => setCurrentPage(index)}
-            >
-              {index + 1}
-            </IconButton>
-          ))}
-        </div>
-        
-        <Button
-          variant="text"
-          className="flex items-center gap-2"
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, pageCount - 1))}
-          disabled={currentPage === pageCount - 1}
-        >
-          NEXT <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* <ReactPaginate
-          previousLabel={<ArrowLeftIcon className='h-4 w-4'/> + 'Previous'}
-          nextLabel={'Next →'}
-          pageCount={Math.ceil(products.length / itemsPerPage)}
-          onPageChange={paginateItems}
-          containerClassName={'pagination'}
-          previousLinkClassName={'pagination__link'}
-          nextLinkClassName={'pagination__link'}
-          disabledClassName={'pagination__link--disabled'}
-          activeClassName={'pagination__link--active'}
-          className='flex justify-center'
-        />
-        <ArrowLeftIcon className='h-4 w-4 border-4' /> */}
+      <PaginatedItems items={Array.from(products)} itemsPerPage={24} />
       
     </>
   );
