@@ -48,7 +48,7 @@ const Chatbot = () => {
     
     if(!existingChatbotButton && !chatbotLoaded){
       const script = document.createElement('script');
-      script.src = "http://localhost:3001/assets/modules/channel-web/inject.js";
+      script.src = "http://localhost:3001/assets/modules/channel-web/customInject.js";
       script.async = true;
       document.body.appendChild(script);
   
