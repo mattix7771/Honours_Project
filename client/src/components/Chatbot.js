@@ -5,6 +5,7 @@ import { logAction, getConfig } from '../util/util';
 // get chatbot configuration from config file
 const config = await getConfig('Chatbot');
 const chatbot_name = config.chatbot;
+const chatbot_honesty = config.chatbot_honesty;
 const chatbot_popup = config.chatbot_popup;
 
 /** 
@@ -15,6 +16,30 @@ const Chatbot = () => {
 
   const [chatbotLoaded, setChatbotLoaded] = useState(false);
   const navigate = useNavigate();
+
+  // Reset chatbot honesty
+  useEffect(() => {
+    if(chatbot_honesty != 0){
+      saveChangeToFile('chatbot_honesty', -1);
+    }
+  }, [chatbot_honesty]);
+
+  // Save configuration changes to file
+  function saveChangeToFile(variable, value){
+    try{
+
+      // API call to write any changes to configuration file
+      fetch('/configWrite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({variable: variable, value: value}),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   // Chatbot initialisation
   useEffect(() => {

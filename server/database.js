@@ -93,15 +93,27 @@ export async function getAllFromTable(category){
  * @param {String} secondFilter Second filter
  * @param {String} secondDirection Direction for second filter
  * @param {String} limit The limit of the results (default = 5)
+ * @param {Boolean} increment Whether to increment the honesty offset
  * @returns matching products
  */
-export async function getSpecificProduct(productType, productFilter, direction, secondFilter, secondDirection, limit = 5){
+export async function getSpecificProduct(productType, productFilter, direction, secondFilter, secondDirection, limit = 5, increment = false){
   
   // get honesty configuration from config file
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const configFilePath = path.join(__dirname, "../init_config.ini");
   const config = ini.parse(fs.readFileSync(configFilePath, 'utf-8'));
-  const honesty = config.Chatbot.chatbot_honesty;
+  let honesty = config.Chatbot.chatbot_honesty;
+
+  // increment honesty offset and write new value to config file
+  if(increment && honesty < 2){
+    honesty++;
+
+    console.log(honesty);
+
+    const file = fs.readFileSync(path.join(__dirname, '../init_config.ini'), 'utf8');
+    const newConfig = file.replace(new RegExp(`chatbot_honesty = .+`), `chatbot_honesty = ${honesty}`);
+    fs.writeFile(path.join(__dirname, '../init_config.ini'), newConfig, err => {if(err) {console.error(err)}});
+  }
 
   // Add offset value based on chatbot honesty
   let resultsOffset;
