@@ -9,7 +9,7 @@ import { logAction } from '../util/util';
  * Allows products search and routes to home and basket
  * Responsible for redirecting user to different pages
  */
-function Navbar({runQuery}) {
+function Navbar() {
 
   const [userSearch, setUserSearch] = useState('');
   const navigate = useNavigate();

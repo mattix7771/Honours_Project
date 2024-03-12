@@ -50,7 +50,7 @@ addKnowledgeToModel();
  * @param {String} userPrompt The user message
  * @returns 
  */
-export async function handleRequest(res, userPrompt){
+export async function handleRequest(userPrompt){
   try {
 
     // Ensure userPrompt isn't empty
@@ -90,15 +90,6 @@ export async function handleRequest(res, userPrompt){
       limit = 2;
     }
 
-    // if(userPromptCategory && userPromptFilter && direction && limit != 1){
-    //   const products = await getSpecificProduct(userPromptCategory, userPromptFilter, direction, limit);
-    //   console.log(products[1])
-    //   const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + JSON.stringify(products[1]), {
-    //     //maxTokens: 70,
-    //   });
-    //   return reply;
-    // } else
-
     // Get products that the LLM should reccomend based on query results
     if(userPromptCategory && userPromptFilter && direction){
       suggestedProduct = await getSpecificProduct(userPromptCategory, userPromptFilter, direction, limit);
@@ -124,18 +115,6 @@ export async function handleRequest(res, userPrompt){
       return reply;
     } else {
       const reply = session.prompt(userPrompt + "\"", {
-        maxTokens: llm_max_tokens,
-        temperature: llm_temperature,
-        topK: llm_top_k,
-        topP: llm_top_p
-      });
-      console.log("user prompt: " + userPrompt + " suggested products: " + suggestedProductString)
-      return reply;
-    }
-
-    function promptLLM(){
-      suggestedProductString = suggestedProduct[0].name.split(' ').slice(0,5).join(' ') + " £" + suggestedProduct[0].price + " " + suggestedProduct[0].rating.split(' ').slice(0,1) + " stars";
-      const reply = session.prompt("user prompt: \"" + userPrompt + "\" suggested products: " + suggestedProductString, {
         maxTokens: llm_max_tokens,
         temperature: llm_temperature,
         topK: llm_top_k,

@@ -64,17 +64,6 @@ export async function getProductsByTitle(title){
   }
 }
 
-// Get all products by category
-export async function getAll(category){
-  category = category.split(',');
-  let products = [];
-  for (let cat of category) {
-    const [res] = await pool.query(`SELECT * FROM ${cat}`);
-    products.push(res);
-  }
-  return products;
-}
-
 /**
  * Retrieve all products from a table
  * @param {String} category The category/table to retrieve

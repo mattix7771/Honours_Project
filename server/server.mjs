@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-//import { handleRequest } from './chatbot.js';
+// import { handleRequest } from './chatbot.js';
 import basketRoutes from './routes/basketRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import fs from 'fs';
@@ -28,12 +28,12 @@ app.use(express.json());
 // Set up session logs
 fs.writeFile(logDir, 'Time, Elapsed time, Action Code, Action', err => {if(err) {console.error(err)}} );
 fs.appendFile(logDir, '\r\n' + `${sessionStart.toLocaleTimeString()},0s,0,session started`, err => {if(err) {console.error(err)}});
-// fs.access(logDir, fs.constants.F_OK, err => {
-//   if (err) {
-//     fs.writeFile(logDir, 'Time, Elapsed time, Action', err => console.error(err) );
-//     fs.appendFile(logDir, '\r\n' + `${sessionStart},0,session started`, err => console.error(err));
-//   }
-// });
+fs.access(logDir, fs.constants.F_OK, err => {
+  if (err) {
+    fs.writeFile(logDir, 'Time, Elapsed time, Action', err => console.error(err) );
+    fs.appendFile(logDir, '\r\n' + `${sessionStart},0,session started`, err => console.error(err));
+  }
+});
 
 // Endpoint to log user movements throughout the application
 app.post('/log', async (req, res) => {
@@ -54,7 +54,7 @@ app.use('/basket', basketRoutes);
 app.post('/chat', async (req, res) => {
   const userPrompt = req.body.prompt;
   const date1 = new Date();
-  const reply = await handleRequest(res, userPrompt);
+  const reply = await handleRequest(userPrompt);
   const date2 = new Date();
   console.log("Elapsed time: " + (date2 - date1) + "ms");
   res.send({ reply });

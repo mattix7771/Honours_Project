@@ -26,27 +26,6 @@ function Home() {
 
   const productCategories = productCategoriesConfig;
 
-  // useEffect(() => {
-  //   const fetchProductCatogories = () => {
-  //     for (var i = 0; i < localStorage.length; i++) {
-  //       var key = localStorage.key(i);
-  //       var value = localStorage.getItem(key);
-  //       if(key.startsWith('checkbox_') && value === 'true'){
-  //         productCatogories.push(key.slice(9,));
-  //       }
-  //     }
-  //     if(productCatogories.length === 0){
-  //       productCatogories.push('phones');
-  //       productCatogories.push('tvs');
-  //       productCatogories.push('headphones');
-  //       productCatogories.push('laptops');
-  //       productCatogories.push('watches');
-  //     }
-  //   }
-
-  //   fetchProductCatogories();
-  // }, []);
-
   // API call to fetch all products by category
   useEffect(() => {
     try{

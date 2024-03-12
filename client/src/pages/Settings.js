@@ -65,30 +65,7 @@ function Settings() {
   const [llmTopP, setLlmTopP] = useState(llm_top_p);
   const [gpuLayers, setGpuLayers] = useState(gpu_layers);
 
-
-
-
-  // Checkboxes state
-  // const [checkboxes, setCheckboxes] = useState({
-  //   phones: true,
-  //   tvs: true,
-  //   headphones: true,
-  //   laptops: true,
-  //   watches: true
-  // });
   
-  // Restore checkbox state from local storage
-  // useEffect(() => {
-  //   const restoredCheckboxes = {};
-  //   for (const key in localStorage) {
-  //     if (key.startsWith('checkbox_')) {
-  //       const id = key.replace('checkbox_', '');
-  //       restoredCheckboxes[id] = localStorage.getItem(key) === 'true';
-  //     }
-  //   }
-  //   setCheckboxes(restoredCheckboxes);
-  // }, []);
-
   /**
    * Handle the switch toggle
    * @param {String} category the category in productCategoriesMap to change
@@ -129,21 +106,6 @@ function Settings() {
       console.error(error);
     }
   }
-
-  // Save checkbox state to local storage when it changes
-  // useEffect(() => {
-  //   for (const key in checkboxes) {
-  //     localStorage.setItem('checkbox_' + key, checkboxes[key]);
-  //   }
-  // }, [checkboxes]);
-
-
-  
-  // const onChange = (event) => {
-  //   const { id, checked } = event.target;
-  //   productCategoriesMap.set(id, checked);
-  //   document.getElementById(id).checked = checked;
-  // };
 
   /**
    * Toggle chatbots dropdown
