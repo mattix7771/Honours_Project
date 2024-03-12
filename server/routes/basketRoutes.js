@@ -31,7 +31,6 @@ router.post('/removeFromBasket', (req, res) => {
     return res.status(400).json({ success: false, message: 'Invalid product data' });
   }
   basket = basket.filter((item) => item.name !== product.name);
-  console.log(basket);
   res.json({ success: true, basket });
 });
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import Product from '../components/Product';
 import { logAction, getProductsByTitle, getConfig } from '../util/util';
 import angle_down from '../resources/angle down.png'; //Free image from freepik.com
 import PaginatedItems from '../components/Pagination';
@@ -37,8 +36,9 @@ function CategoryProducts() {
       // Get API response and assign it to products variable
       const p = await getProductsByTitle(category);
       setProducts(p[0]);
+
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error('Error:', error);
     }
   }
 

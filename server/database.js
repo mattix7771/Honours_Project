@@ -85,19 +85,22 @@ export async function getAllFromTable(category){
  * @param {Boolean} increment Whether to increment the honesty offset
  * @returns matching products
  */
-export async function getSpecificProduct(productType, productFilter, direction, secondFilter, secondDirection, limit = 5, increment = false){
+export async function getSpecificProduct(productType, productFilter, direction, secondFilter, secondDirection, limit = 5, increment){
   
   // get honesty configuration from config file
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const configFilePath = path.join(__dirname, "../init_config.ini");
   const config = ini.parse(fs.readFileSync(configFilePath, 'utf-8'));
-  let honesty = config.Chatbot.chatbot_honesty;
+  let honesty = parseInt(config.Chatbot.chatbot_honesty);
+
+  // convert increment to boolean
+  increment = (increment === "true");
 
   // increment honesty offset and write new value to config file
-  if(increment && honesty < 2){
+  if(increment === true && honesty < 2){
     honesty++;
 
-    console.log(honesty);
+    console.log("honesty: " + honesty);
 
     const file = fs.readFileSync(path.join(__dirname, '../init_config.ini'), 'utf8');
     const newConfig = file.replace(new RegExp(`chatbot_honesty = .+`), `chatbot_honesty = ${honesty}`);
@@ -122,9 +125,7 @@ export async function getSpecificProduct(productType, productFilter, direction, 
       [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction}, ${secondFilter} ${secondDirection} LIMIT ${limit} OFFSET ${resultsOffset}`);
     } else {
       [res] = await pool.query(`SELECT * FROM ${productType}_backlog ORDER BY ${productFilter} ${direction} LIMIT ${limit} OFFSET ${resultsOffset}`);
-      console.log(res);
     }
-    console.log(resultsOffset);
     return res;
 
   } catch (error) {

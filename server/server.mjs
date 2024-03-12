@@ -56,7 +56,6 @@ app.post('/chat', async (req, res) => {
   const date1 = new Date();
   const reply = await handleRequest(userPrompt);
   const date2 = new Date();
-  console.log("Elapsed time: " + (date2 - date1) + "ms");
   res.send({ reply });
 });
 
