@@ -8,13 +8,15 @@ const chatbot_name = config.chatbot;
 const chatbot_honesty = config.chatbot_honesty;
 const chatbot_popup = config.chatbot_popup;
 
+sessionStorage.setItem('chatbotLoaded', false);
+
 /** 
  * Chatbot component
  * Responsible for chatbot initialisation and event handling
  */
 const Chatbot = () => {
 
-  const [chatbotLoaded, setChatbotLoaded] = useState(false);
+  const [chatbotLoaded, setChatbotLoaded] = useState(sessionStorage.getItem('chatbotLoaded') === 'true' ? true : false);
   const navigate = useNavigate();
 
   // Reset chatbot honesty
@@ -44,9 +46,7 @@ const Chatbot = () => {
   // Chatbot initialisation
   useEffect(() => {
     
-    const existingChatbotButton = document.querySelector('.bpw-widget-btn');
-    
-    if(!existingChatbotButton && !chatbotLoaded){
+    if(!chatbotLoaded){
       const script = document.createElement('script');
       script.src = "http://localhost:3001/assets/modules/channel-web/customInject.js";
       script.async = true;
