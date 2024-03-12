@@ -1,10 +1,11 @@
 node_modules/
-*.json
+package*.json
 *env
 *.gguf
 *.exe
 *.csv
 
 botpress-bot/bin
+botpress-bot/data
 botpress-bot/bindings
 botpress-bot/modules
