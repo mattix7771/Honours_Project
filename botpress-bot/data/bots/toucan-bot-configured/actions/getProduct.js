@@ -13,7 +13,7 @@
     if (productFilter == 'best') {
       var config = {
         method: 'get',
-        url: `http://localhost:5000/products/getSpecificProduct/${productType}/rating/DESC/price/ASC/5/true`,
+        url: `http://localhost:5000/products/getSpecificProduct/${productType}/rating/DESC/price/ASC/5`,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
@@ -22,7 +22,7 @@
     } else {
       var config = {
         method: 'get',
-        url: `http://localhost:5000/products/getSpecificProduct/${productType}/${productFilter}/ASC/5/true`,
+        url: `http://localhost:5000/products/getSpecificProduct/${productType}/${productFilter}/ASC/5`,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'

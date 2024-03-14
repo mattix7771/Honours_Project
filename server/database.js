@@ -42,9 +42,10 @@ export async function getAllProducts() {
 /**
  * Retrieve all products with a matching title
  * @param {String} title the string to match any product title with
+ * @param {Boolean} returnTable whether to return the table name of the matching products
  * @returm all matching products
  */
-export async function getProductsByTitle(title){
+export async function getProductsByTitle(title, returnTable = false){
   try {
     const [tableList] = await pool.query('SHOW TABLES');
     const tables = tableList.map((row) => Object.values(row)[0]);
@@ -53,6 +54,9 @@ export async function getProductsByTitle(title){
 
     for (const table of tables) {
       const [res] = await pool.query(`SELECT * FROM ${table} WHERE name LIKE ?`, [`%${title}%`]);
+      if (returnTable && res.length > 0){
+        return table;
+      }
       allData[table] = res;
     }
     const allProducts = Object.values(allData).flat();
@@ -129,6 +133,38 @@ export async function getSpecificProduct(productType, productFilter, direction, 
     return res;
 
   } catch (error) {
+    console.error(error);
+  }
+}
+
+/**
+ * Retrieve the absolute distance between two products within a table
+ * @param {String} productPurchased name of the product purchased
+ * @param {String} optimalProduct name of the optimal product
+ * @returns the absolute distance between the two products
+ */
+export async function distanceBetweenEntries(productPurchased, optimalProduct){
+  try{
+    
+    // get table names for products
+    let productPurchasedTable = await getProductsByTitle(productPurchased, true);
+    let optimalProductTable = await getProductsByTitle(optimalProduct, true);
+    
+    console.log(productPurchasedTable);
+    console.log(optimalProductTable);
+    console.log(productPurchased.toString());
+    console.log(optimalProduct.toString());
+
+    // if user purchased wrong product category, return worst score
+    if (productPurchasedTable != optimalProductTable){
+      return 100;
+    }
+  
+    const res = await pool.query(`SELECT ABS(MAX(product1.id) - MIN(product2.id)) AS distance FROM phones_backlog AS product1 JOIN ${productPurchasedTable} AS product2 ON 1=1 WHERE product1.name = ? AND product2.name = ?`, [productPurchased, optimalProduct]);
+   
+    return res[0][0].distance;
+
+  } catch (error){
     console.error(error);
   }
 }

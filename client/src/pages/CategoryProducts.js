@@ -50,12 +50,24 @@ function CategoryProducts() {
     try{
 
       // API call to fetch product reccomendations
-      const response = await fetch(`/products/getSpecificProduct/${productDetails[0]}/${productDetails[1]}/ASC/5/false`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      let response;
+
+      if (productDetails[1] == 'best') {
+        response = await fetch(`/products/getSpecificProduct/${productDetails[0]}/rating/DESC/price/ASC/5/false`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }); 
+      }
+      else {
+        response = await fetch(`/products/getSpecificProduct/${productDetails[0]}/${productDetails[1]}/ASC/5/false`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }); 
+      }
       
       // Get API response and assign it to products variable
       const data = await response.json();

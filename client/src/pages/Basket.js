@@ -58,6 +58,40 @@ function Basket() {
     window.location.reload();
   }
 
+  // Get all the names of the products in the basket
+  function getProductNames(){
+    let names = [];
+    for(let product of products){
+      names.push(product.name);
+    }
+    return names;
+  }
+
+  // API call to generate score based on purchased product
+  function generateScore(){
+    
+    // Check if there are any products in the basket
+    if (products.length == 0) {
+      return;
+    }
+
+    const purchasedProduct = products[0].name;
+
+    try{
+      // API call to generate score
+      fetch('/generateScore', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ purchasedProduct }),
+      });
+
+    } catch(error) {
+      console.error('Error:', error);
+    }
+  }
+
   return (
     <>
       {/* Navbar */}
@@ -90,8 +124,9 @@ function Basket() {
       <button 
         className='bg-blue-300 w-40 h-20 font-bold text-lg' 
         onClick={() => {
+        logAction(`items purchased: ${getProductNames().join(',')}`, 7);
+        generateScore();
         purchaseItems();
-        logAction(`items purchased ${products}`, 7);
         document.querySelector("#alert").classList.toggle("hidden")}}>
         Purchase
       </button>

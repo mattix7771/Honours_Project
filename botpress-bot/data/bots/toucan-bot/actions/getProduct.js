@@ -8,7 +8,6 @@
    * @param {string} productFilter - What to filter the product by
    */
   const myAction = async (productType, productFilter) => {
-
     // Custom API call to get products based on user's choices
     if (productFilter == 'best') {
       var config = {

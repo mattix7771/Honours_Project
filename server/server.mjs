@@ -4,9 +4,10 @@ import cors from 'cors';
 // import { handleRequest } from './chatbot.js';
 import basketRoutes from './routes/basketRoutes.js';
 import productRoutes from './routes/productRoutes.js';
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { distanceBetweenEntries } from './database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +16,8 @@ const app = express();
 app.use(bodyParser.json());
 
 const logDir = '../session_logs.csv';
+const scoreDir = '../score.txt';
+const optimal_answersDir = '../optimal_answers.txt';
 const sessionStart = new Date();
 
 // Enable CORS for requests from localhost:3000
@@ -35,6 +38,15 @@ fs.access(logDir, fs.constants.F_OK, err => {
   }
 });
 
+// Set up user scores
+fs.writeFile(scoreDir, 'User Scores', err => {if(err) {console.error(err)}});
+
+let optimal_answers = [];
+let taskNum = 0;
+fs.readFileSync(optimal_answersDir, 'utf8').split(';').forEach((line) => {
+  optimal_answers.push(line);
+});
+
 // Endpoint to log user movements throughout the application
 app.post('/log', async (req, res) => {
   const actionTime = new Date();
@@ -53,9 +65,7 @@ app.use('/basket', basketRoutes);
 // Endpoint to handle LLM chat requests
 app.post('/chat', async (req, res) => {
   const userPrompt = req.body.prompt;
-  const date1 = new Date();
   const reply = await handleRequest(userPrompt);
-  const date2 = new Date();
   res.send({ reply });
 });
 
@@ -76,6 +86,41 @@ app.post('/configWrite', (req, res) => {
   const config = file.replace(new RegExp(`${variable} = .+`), `${variable} = ${value}`);
   fs.writeFile(path.join(__dirname, '../init_config.ini'), config, err => {if(err) {console.error(err)}});
   
+  res.sendStatus(200);
+});
+
+// Endpoint to generate a score based on accuracy of product purchased and time taken
+app.post('/generateScore', async (req, res) => {
+
+  // Get distance between purchased product and optimal product in database
+  const productPurchased = req.body.purchasedProduct;
+  const optimalProduct = optimal_answers[taskNum];
+  let distance = await distanceBetweenEntries(productPurchased, optimalProduct);
+  
+  // Get time taken to purchase product
+  let timeTaken = (new Date() - sessionStart)/1000;
+  
+  // Cap distance and time taken at 100
+  if (distance > 100){
+    distance = 100;
+  }
+  if (timeTaken > 100){
+    timeTaken = 100;
+  }
+
+  console.log(`Distance: ${distance}, Time taken: ${timeTaken}`);
+
+  // If 5 tasks have been completed, calculate final score
+  const lines = readFileSync(scoreDir, 'utf8').split('\n');
+  if (lines.length >= 5){
+    const finalScore = ((distance + timeTaken - 1)/999)*100;
+    fs.appendFile(scoreDir, `\nFinal score\n${finalScore}`, err => {if(err) {console.error(err)}});
+  }
+
+  // Append score to file
+  fs.appendFile(scoreDir, '\r\n' + `${distance + timeTaken}`, err => {if(err) {console.error(err)}});
+
+  taskNum++;
   res.sendStatus(200);
 });
 
