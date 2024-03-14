@@ -14,6 +14,9 @@ function ProductDetails() {
   const { id } = useParams();
   const { title, name, price, image, rating } = location.state;
   let productInfo = JSON.stringify({ name, price, image });
+
+  // Round rating
+  const starCount = Math.round(rating.split(' ').slice(0,1));
   
   /**
    * Add product to basket
@@ -65,10 +68,14 @@ function ProductDetails() {
           <a className='text-7xl font-bold'>{title}</a><br/>
           <div className='m-5 text-3xl font-semibold'>
             <a className=''>{name}</a><br/>
-            <a>£{price}</a><br/>
-            <a>{rating}</a><br/>
+            <a>£{price}</a><br/><br/>
+            <a>
+              {Array(starCount).fill().map((_, index) => (
+                <span key={index}>⭐</span>
+              ))}
+            </a><br/><br/>
           </div>
-          <button className='bg-blue-300 w-40 h-20 font-bold text-lg' onClick={addToCart}>
+          <button className='bg-blue-300 w-40 h-20 font-bold text-lg rounded-lg' onClick={addToCart}>
             Add to cart
           </button>
         </div>

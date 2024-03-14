@@ -105,12 +105,11 @@ function Basket() {
       {/* Product */}
       <div className='m-2'>
         {products.map((product, index) => (
-            <div key={index} className='inline-flex'>
+            <div key={index} className='flex m-6 my-10'>
               <img src={product.image} className='max-h-[160px] min-h-[160px]'/>
-              <a>{product.name}</a><br/>
-              <a>{product.price}</a><br/>
+              <a className='font-bold m-5'>{product.name}<br/>£{product.price}</a>
               <button 
-                className='bg-blue-300 w-40 h-20 font-bold text-lg' 
+                className='bg-blue-300 w-40 h-20 font-bold text-lg rounded-lg ml-10 mt-10' 
                 onClick={() => {
                   removeItem(product.name);
                   logAction(`product removed from basket: ${product.name}`, 4);}}>
@@ -122,7 +121,7 @@ function Basket() {
 
       {/* Purchase Button */}
       <button 
-        className='bg-blue-300 w-40 h-20 font-bold text-lg' 
+        className='bg-blue-300 w-40 h-20 font-bold text-lg rounded-lg float-right mr-96' 
         onClick={() => {
         logAction(`items purchased: ${getProductNames().join(',')}`, 7);
         generateScore();

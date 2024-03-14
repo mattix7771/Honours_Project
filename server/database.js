@@ -160,7 +160,7 @@ export async function distanceBetweenEntries(productPurchased, optimalProduct){
       return 100;
     }
   
-    const res = await pool.query(`SELECT ABS(MAX(product1.id) - MIN(product2.id)) AS distance FROM phones_backlog AS product1 JOIN ${productPurchasedTable} AS product2 ON 1=1 WHERE product1.name = ? AND product2.name = ?`, [productPurchased, optimalProduct]);
+    const res = await pool.query(`SELECT ABS(MAX(product1.id) - MIN(product2.id)) AS distance FROM ${productPurchasedTable} AS product1 JOIN ${productPurchasedTable} AS product2 ON 1=1 WHERE product1.name = ? AND product2.name = ?`, [productPurchased, optimalProduct]);
    
     return res[0][0].distance;
 

@@ -29,7 +29,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Set up session logs
-fs.writeFile(logDir, 'Time, Elapsed time, Action Code, Action', err => {if(err) {console.error(err)}} );
+fs.appendFile(logDir, '\n\nTime, Elapsed time, Action Code, Action', err => {if(err) {console.error(err)}} );
 fs.appendFile(logDir, '\r\n' + `${sessionStart.toLocaleTimeString()},0s,0,session started`, err => {if(err) {console.error(err)}});
 fs.access(logDir, fs.constants.F_OK, err => {
   if (err) {
@@ -39,7 +39,12 @@ fs.access(logDir, fs.constants.F_OK, err => {
 });
 
 // Set up user scores
-fs.writeFile(scoreDir, 'User Scores', err => {if(err) {console.error(err)}});
+fs.appendFile(scoreDir, '\n\nUser Scores', err => {if(err) {console.error(err)}});
+fs.access(scoreDir, fs.constants.F_OK, err => {
+  if (err) {
+    fs.writeFile(scoreDir, 'User Scores', err => console.error(err) );
+  }
+});
 
 let optimal_answers = [];
 let taskNum = 0;
