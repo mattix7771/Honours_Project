@@ -15,7 +15,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/:isCorrectProduct?' element={<Home />} />
         <Route path='/basket' element={<Basket />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/product_details/:id' element={<ProductDetails />} />

@@ -95,14 +95,16 @@ app.post('/configWrite', (req, res) => {
 });
 
 // Endpoint to generate a score based on accuracy of product purchased and time taken
-app.post('/generateScore', async (req, res) => {
+app.get('/generateScore/:productPurchased', async (req, res) => {
 
   // Get distance between purchased product and optimal product in database
-  const productPurchased = req.body.purchasedProduct;
+  const productPurchased = JSON.parse(decodeURIComponent(req.params.productPurchased));
   const optimalProduct = optimal_answers[taskNum];
   let distance = await distanceBetweenEntries(productPurchased, optimalProduct);
   
   // Get time taken to purchase product
+  const lines = readFileSync(scoreDir, 'utf8').split('\n');
+  const previousTime = lines[lines.length-1].split(': ')[2];
   let timeTaken = (new Date() - sessionStart)/1000;
   
   // Cap distance and time taken at 100
@@ -113,20 +115,16 @@ app.post('/generateScore', async (req, res) => {
     timeTaken = 100;
   }
 
-  console.log(`Distance: ${distance}, Time taken: ${timeTaken}`);
-
-  // If 5 tasks have been completed, calculate final score
-  const lines = readFileSync(scoreDir, 'utf8').split('\n');
-  if (lines.length >= 5){
-    const finalScore = ((distance + timeTaken - 1)/999)*100;
-    fs.appendFile(scoreDir, `\nFinal score\n${finalScore}`, err => {if(err) {console.error(err)}});
-  }
-
   // Append score to file
-  fs.appendFile(scoreDir, '\r\n' + `${distance + timeTaken}`, err => {if(err) {console.error(err)}});
+  fs.appendFile(scoreDir, '\r\n' + `distance: ${distance}, time taken: ${timeTaken}`, err => {if(err) {console.error(err)}});
 
   taskNum++;
-  res.sendStatus(200);
+
+  if (distance > 0){
+    res.send(false);
+  } else {
+    res.send(true);
+  }
 });
 
 // Setup Express on port 5000 or port specified in .env file

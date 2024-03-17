@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DigitalDevices from '../resources/digital devices.jpg'; //Free image from freepik.com
 import Navbar from '../components/Navbar';
 import Product from '../components/Product';
@@ -23,6 +23,9 @@ function Home() {
 
   // Local product storage
   const [products, setProducts] = useState({});
+
+  // Whether the purchased product is correct
+  let isCorrectProduct = useParams().isCorrectProduct;
 
   const productCategories = productCategoriesConfig;
 
@@ -66,12 +69,17 @@ function Home() {
     </div>
   ));
 
-
+  
   return (
     <div>
       
       {/* Navbar */}
       <Navbar/>
+
+      {/* Alert */}
+      {isCorrectProduct != undefined  && <div class="flex bg-blue-100 border m-4 w-96 justify-center align-middle border-blue-500 text-blue-700 px-4 py-3" role="alert" id='alert'>
+        <p class="font-bold">The product you purchased was {isCorrectProduct}</p>
+      </div>}
 
       {/* Banner */}
       {slogan_banner && <div className='flex bg-[#caf2ff] h-full w-[90vw] m-20 rounded-3xl px-20 items-center'>

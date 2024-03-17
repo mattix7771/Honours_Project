@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate  } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { logAction } from '../util/util';
 
@@ -10,6 +11,8 @@ function Basket() {
 
   // Products in basket
   const [products, setProducts] = useState([{}]);
+
+  const navigate = useNavigate();
 
   // API call to get all the products added to basket
   useEffect(() => {
@@ -53,9 +56,6 @@ function Basket() {
     } catch (error) {
       console.error('Error:', error);
     }
-
-    // Reload page to update basket
-    window.location.reload();
   }
 
   // Get all the names of the products in the basket
@@ -68,7 +68,7 @@ function Basket() {
   }
 
   // API call to generate score based on purchased product
-  function generateScore(){
+  async function generateScore(){
     
     // Check if there are any products in the basket
     if (products.length == 0) {
@@ -79,13 +79,22 @@ function Basket() {
 
     try{
       // API call to generate score
-      fetch('/generateScore', {
-        method: 'POST',
+      const response = await fetch(`/generateScore/${encodeURIComponent(JSON.stringify(purchasedProduct))}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ purchasedProduct }),
+        }
       });
+
+      // Redirect to Home component
+      let isCorrectProduct = await response.json();
+
+      if (isCorrectProduct)
+        isCorrectProduct = 'correct';
+      else
+        isCorrectProduct = 'incorrect';
+
+      navigate(`/${isCorrectProduct}`);
 
     } catch(error) {
       console.error('Error:', error);
@@ -99,7 +108,7 @@ function Basket() {
 
       {/* Alert */}
       <div class="flex bg-blue-100 border m-4 w-96 justify-center align-middle border-blue-500 text-blue-700 px-4 py-3 hidden" role="alert" id='alert'>
-        <p class="font-bold">Product successfully added to cart!</p>
+        <p class="font-bold">Product successfully prchased!</p>
       </div>
 
       {/* Product */}
