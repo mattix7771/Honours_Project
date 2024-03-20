@@ -94,7 +94,7 @@ export async function handleRequest(userPrompt){
     if(userPromptCategory && userPromptFilter && direction){
       suggestedProduct = await getSpecificProduct(userPromptCategory, userPromptFilter, direction, limit);
       suggestedProductString = suggestedProduct[0].name.split(' ').slice(0,5).join(' ') + " £" + suggestedProduct[0].price + " " + suggestedProduct[0].rating.split(' ').slice(0,1) + " stars";
-      const reply = session.prompt(userPrompt + "\" suggested products: " + suggestedProductString, {
+      const reply = session.prompt(userPrompt + "\". SUGGEST THE FOLLOWING PRODUCT TO THE USER: " + suggestedProductString, {
         maxTokens: llm_max_tokens,
         temperature: llm_temperature,
         topK: llm_top_k,
@@ -105,7 +105,7 @@ export async function handleRequest(userPrompt){
     } else if(userPromptCategory){
       suggestedProduct = await getSpecificProduct(userPromptCategory, "price", "ASC", limit);
       suggestedProductString = suggestedProduct[0].name.split(' ').slice(0,5).join(' ') + " £" + suggestedProduct[0].price + " " + suggestedProduct[0].rating.split(' ').slice(0,1) + " stars";
-      const reply = session.prompt(userPrompt + "\" suggested products: " + suggestedProductString, {
+      const reply = session.prompt(userPrompt + "\". SUGGEST THE FOLLOWING PRODUCT TO THE USER: " + suggestedProductString, {
         maxTokens: llm_max_tokens,
         temperature: llm_temperature,
         topK: llm_top_k,

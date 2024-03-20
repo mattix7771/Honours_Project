@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-// import { handleRequest } from './chatbot.js';
+import { handleRequest } from './chatbot.js';
 import basketRoutes from './routes/basketRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import fs, { readFileSync } from 'fs';
@@ -57,7 +57,15 @@ app.post('/log', async (req, res) => {
   const actionTime = new Date();
   const log = req.body.log;
   const actionCode = req.body.code;
-  fs.appendFile(logDir, '\r\n' + `${actionTime.toLocaleTimeString()},${(actionTime-sessionStart)/1000}s,${actionCode},${log}`, err => {if(err) {console.error(err)}});
+
+  // Append log if unique
+  const lastLine = fs.readFileSync(logDir, 'utf8').split('\r\n').slice(-1)[0].split(',').slice(3).join(',');
+  const currentLine = `${log}`;
+  
+  if (lastLine != currentLine){
+    fs.appendFile(logDir, '\r\n' + `${actionTime.toLocaleTimeString()},${(actionTime-sessionStart)/1000}s,${actionCode},${log}`, err => {if(err) {console.error(err)}});
+  }
+
   res.sendStatus(200);
 });
 
@@ -103,16 +111,19 @@ app.get('/generateScore/:productPurchased', async (req, res) => {
   let distance = await distanceBetweenEntries(productPurchased, optimalProduct);
   
   // Get time taken to purchase product
-  const lines = readFileSync(scoreDir, 'utf8').split('\n');
-  const previousTime = lines[lines.length-1].split(': ')[2];
-  let timeTaken = (new Date() - sessionStart)/1000;
+  const previousTimeFile = readFileSync(scoreDir, 'utf8').split('\n').slice(-1)[0].split('time taken: ')[1];
+  const previousTime = new Date(previousTimeFile * 1000)
+  let timeTaken;
+  if (!isNaN(previousTime.getTime()))
+    timeTaken = (new Date() - sessionStart - previousTime)/1000;
+  else
+    timeTaken = (new Date() - sessionStart)/1000;
   
-  // Cap distance and time taken at 100
+  console.log(previousTime)
+
+  // Cap distance
   if (distance > 100){
     distance = 100;
-  }
-  if (timeTaken > 100){
-    timeTaken = 100;
   }
 
   // Append score to file

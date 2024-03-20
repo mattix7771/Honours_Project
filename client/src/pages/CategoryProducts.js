@@ -49,6 +49,13 @@ function CategoryProducts() {
   async function fetchRecommendedProducts(productDetails){
     try{
 
+      // Determine query direction
+      let direction;
+      if (productDetails[1] == 'price')
+        direction = 'ASC';
+      else if (productDetails[1] == 'rating')
+        direction = 'DESC';
+
       // API call to fetch product reccomendations
       let response;
 
@@ -61,7 +68,7 @@ function CategoryProducts() {
         }); 
       }
       else {
-        response = await fetch(`/products/getSpecificProduct/${productDetails[0]}/${productDetails[1]}/ASC/5/false`, {
+        response = await fetch(`/products/getSpecificProduct/${productDetails[0]}/${productDetails[1]}/${direction}/5/false`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
