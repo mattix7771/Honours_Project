@@ -9,11 +9,17 @@
    */
   const myAction = async (productType, productFilter) => {
 
+    let direction;
+    if (productFilter == 'price')
+      direction = 'ASC';
+    else if (productFilter == 'rating')
+      direction = 'DESC';
+
     // Custom API call to get products based on user's choices
     if (productFilter == 'best') {
       var config = {
         method: 'get',
-        url: `http://localhost:5000/products/getSpecificProduct/${productType}/rating/DESC/price/ASC/5`,
+        url: `http://localhost:5000/products/getSpecificProduct/${productType}/rating/DESC/price/ASC/5/true`,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
@@ -22,7 +28,7 @@
     } else {
       var config = {
         method: 'get',
-        url: `http://localhost:5000/products/getSpecificProduct/${productType}/${productFilter}/ASC/5`,
+        url: `http://localhost:5000/products/getSpecificProduct/${productType}/${productFilter}/${direction}/5/true`,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
