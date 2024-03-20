@@ -8,7 +8,8 @@ const chatbot_name = config.chatbot;
 const chatbot_honesty = config.chatbot_honesty;
 const chatbot_popup = config.chatbot_popup;
 
-sessionStorage.setItem('chatbotLoaded', false);
+// Use localstorage to only load bot and starting message once
+localStorage.setItem('chatbotLoaded', false);
 
 /** 
  * Chatbot component
@@ -16,8 +17,10 @@ sessionStorage.setItem('chatbotLoaded', false);
  */
 const Chatbot = () => {
 
-  const [chatbotLoaded, setChatbotLoaded] = useState(sessionStorage.getItem('chatbotLoaded') === 'true' ? true : false);
+  const [chatbotLoaded, setChatbotLoaded] = useState(localStorage.getItem('chatbotLoaded') === 'true' ? true : false);
   const navigate = useNavigate();
+  const logTimeout = 1000;
+  let prevLogTime = 0;
 
   // Reset chatbot honesty
   useEffect(() => {
@@ -47,6 +50,7 @@ const Chatbot = () => {
   useEffect(() => {
     
     if(!chatbotLoaded){
+      console.log('ji')
       const script = document.createElement('script');
       script.src = "http://localhost:3001/assets/modules/channel-web/customInject.js";
       script.async = true;
@@ -60,17 +64,26 @@ const Chatbot = () => {
         });
       }
       setChatbotLoaded(true);
+      localStorage.setItem('chatbotLoaded', true);
     }
   }, [chatbotLoaded]);
+
+  function checkLogAction(action, code) {
+    const currentTime = Date.now();
+    if (currentTime - prevLogTime > logTimeout) {
+      logAction(action, code);
+      prevLogTime = currentTime;
+    }
+  }
 
   // Once chatbot loaded, listen for chat events and log them
   useEffect(() => {
     if(chatbotLoaded){
       window.addEventListener("message", function(event) {
         if (event.data.name === "webchatOpened") {
-          logAction("Chatbot opened", 10);
+          checkLogAction("Chatbot opened", 10);
         } else if (event.data.name === "webchatClosed") {
-          logAction("Chatbot closed", 11);
+          checkLogAction("Chatbot closed", 11);
         } else if (event.data.name === "webchatReady") {
           window.botpressWebChat.sendEvent({
             type: 'proactive-trigger',
@@ -81,9 +94,9 @@ const Chatbot = () => {
           navigate(`/category_products/${JSON.stringify(data)}`);
         } else if (event.type === "message" && event.data.payload && event.data.payload.text) {
           if(event.data.payload.typing)
-            logAction(`Chatbot sent message: ${event.data.payload.text}`, 13);
+            checkLogAction(`Chatbot sent message: ${event.data.payload.text}`, 13);
           else
-            logAction(`User sent message: ${event.data.payload.text}`, 12);
+            checkLogAction(`User sent message: ${event.data.payload.text}`, 12);
         }
       })
     }
