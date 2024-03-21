@@ -13,7 +13,7 @@ function Product(props) {
   }
   
   // Round rating
-  const starCount = Math.round(props.rating.split(' ').slice(0,1));
+  const starCount = Math.floor(props.rating.split(' ').slice(0,1));
 
   
   return (
@@ -21,7 +21,7 @@ function Product(props) {
       
       {/* Picture (link to ProductDetails page) */}
       <Link
-        to={`/product_details/${encodeURIComponent(props.name)}`}
+        to={`/product_details/${encodeURIComponent(props.name.replace('%',''))}`}
         state = {{
           title: props.name.split(' ').slice(0, 1).join(' '),
           name: props.name,

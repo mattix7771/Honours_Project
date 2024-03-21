@@ -75,11 +75,13 @@ function Basket() {
       return;
     }
 
-    const purchasedProduct = products[0].name;
+    // Ecode object name
+    const purchasedProduct = products[0].name.replace('%','');
+    const encodedPurchasedProduct = encodeURIComponent(JSON.stringify(purchasedProduct));
 
     try{
       // API call to generate score
-      const response = await fetch(`/generateScore/${encodeURIComponent(JSON.stringify(purchasedProduct))}`, {
+      const response = await fetch(`/generateScore/${encodedPurchasedProduct}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

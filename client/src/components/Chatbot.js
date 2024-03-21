@@ -11,6 +11,21 @@ const chatbot_popup = config.chatbot_popup;
 // Use localstorage to only load bot and starting message once
 localStorage.setItem('chatbotLoaded', false);
 
+// Reset chatbot honesty
+try{
+
+  // API call to write any changes to configuration file
+  fetch('/configWrite', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({variable: 'chatbot_honesty', value: -2}),
+  });
+} catch (error) {
+  console.error(error);
+}
+
 /** 
  * Chatbot component
  * Responsible for chatbot initialisation and event handling
@@ -21,30 +36,6 @@ const Chatbot = () => {
   const navigate = useNavigate();
   const logTimeout = 1000;
   let prevLogTime = 0;
-
-  // Reset chatbot honesty
-  useEffect(() => {
-    if(chatbot_honesty != 0){
-      saveChangeToFile('chatbot_honesty', -1);
-    }
-  }, [chatbot_honesty]);
-
-  // Save configuration changes to file
-  function saveChangeToFile(variable, value){
-    try{
-
-      // API call to write any changes to configuration file
-      fetch('/configWrite', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({variable: variable, value: value}),
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   // Chatbot initialisation
   useEffect(() => {

@@ -104,8 +104,6 @@ export async function getSpecificProduct(productType, productFilter, direction, 
   if(increment === true && honesty < 2){
     honesty++;
 
-    console.log("honesty: " + honesty);
-
     const file = fs.readFileSync(path.join(__dirname, '../init_config.ini'), 'utf8');
     const newConfig = file.replace(new RegExp(`chatbot_honesty = .+`), `chatbot_honesty = ${honesty}`);
     fs.writeFile(path.join(__dirname, '../init_config.ini'), newConfig, err => {if(err) {console.error(err)}});
@@ -149,11 +147,6 @@ export async function distanceBetweenEntries(productPurchased, optimalProduct){
     // get table names for products
     let productPurchasedTable = await getProductsByTitle(productPurchased, true);
     let optimalProductTable = await getProductsByTitle(optimalProduct, true);
-    
-    console.log(productPurchasedTable);
-    console.log(optimalProductTable);
-    console.log(productPurchased.toString());
-    console.log(optimalProduct.toString());
 
     // if user purchased wrong product category, return worst score
     if (productPurchasedTable != optimalProductTable){

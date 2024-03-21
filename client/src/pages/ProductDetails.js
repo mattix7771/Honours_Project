@@ -16,7 +16,7 @@ function ProductDetails() {
   let productInfo = JSON.stringify({ name, price, image });
 
   // Round rating
-  const starCount = Math.round(rating.split(' ').slice(0,1));
+  const starCount = Math.floor(rating.split(' ').slice(0,1));
   
   /**
    * Add product to basket

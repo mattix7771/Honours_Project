@@ -108,8 +108,17 @@ app.get('/generateScore/:productPurchased', async (req, res) => {
   // Get distance between purchased product and optimal product in database
   const productPurchased = JSON.parse(decodeURIComponent(req.params.productPurchased));
   const optimalProduct = optimal_answers[taskNum];
-  let distance = await distanceBetweenEntries(productPurchased, optimalProduct);
+
+  // Uncomment to get actual distance in db
+  // let distance = await distanceBetweenEntries(productPurchased, optimalProduct);
   
+  // Penalise choosing wrong product
+  let distance;
+  if (productPurchased != optimalProduct)
+    distance = 100;
+  else
+    distance = 0;
+
   // Get time taken to purchase product
   const previousTimeFile = readFileSync(scoreDir, 'utf8').split('\n').slice(-1)[0].split('time taken: ')[1];
   const previousTime = new Date(previousTimeFile * 1000)
@@ -118,8 +127,6 @@ app.get('/generateScore/:productPurchased', async (req, res) => {
     timeTaken = (new Date() - sessionStart - previousTime)/1000;
   else
     timeTaken = (new Date() - sessionStart)/1000;
-  
-  console.log(previousTime)
 
   // Cap distance
   if (distance > 100){
