@@ -34,7 +34,7 @@ const session = new LlamaChatSession({ context });
 // Get knowledge to add to model
 const knowledge = fs.readFileSync('starting_context.txt', 'utf-8');
 const lines = knowledge.split(/\r?\n/);
-const modelPrompt = lines[language_style+1];
+const modelPrompt = lines[language_style];
 
 /**
  * Process user message
@@ -103,7 +103,7 @@ export async function handleRequest(userPrompt){
       });
       return reply;
     } else {
-      const reply = session.prompt(userPrompt + "\"", {
+      const reply = session.prompt(modelPrompt + " User Prompt: " + userPrompt + "\"", {
         maxTokens: llm_max_tokens,
         temperature: llm_temperature,
         topK: llm_top_k,

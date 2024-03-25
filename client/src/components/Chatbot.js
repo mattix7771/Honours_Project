@@ -10,6 +10,7 @@ const chatbot_popup = config.chatbot_popup;
 
 // Use localstorage to only load bot and starting message once
 localStorage.setItem('chatbotLoaded', false);
+localStorage.setItem('triggerSent', false);
 
 // Reset chatbot honesty
 try{
@@ -41,7 +42,6 @@ const Chatbot = () => {
   useEffect(() => {
     
     if(!chatbotLoaded){
-      console.log('ji')
       const script = document.createElement('script');
       script.src = "http://localhost:3001/assets/modules/channel-web/customInject.js";
       script.async = true;
@@ -76,10 +76,13 @@ const Chatbot = () => {
         } else if (event.data.name === "webchatClosed") {
           checkLogAction("Chatbot closed", 11);
         } else if (event.data.name === "webchatReady") {
-          window.botpressWebChat.sendEvent({
-            type: 'proactive-trigger',
-            channel: 'web'
-          });
+          if (localStorage.getItem('triggerSent') === 'false') {
+            window.botpressWebChat.sendEvent({
+              type: 'proactive-trigger',
+              channel: 'web'
+            });
+            localStorage.setItem('triggerSent', true);
+          }
         } else if(event.type === "message" && event.data.data && event.data.type == "data"){
           const data = event.data.data.split(',');
           navigate(`/category_products/${JSON.stringify(data)}`);
