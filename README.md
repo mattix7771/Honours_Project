@@ -49,7 +49,7 @@ The init_config.ini file specifies the beginning state of the application. These
 
 ### Chatbot Settings
 **chatbot** specifies which chatbot should be used. There are currently 3 options: *toucan-bot* which features normal chatbot capabilites and the ability to conversate with a LLM, *toucan-bot-configured* which only offers basic chatbot capabilities, and *toucan-bot-llm* which only offers the ability to talk to a LLM. (eg. chatbot = toucan-bot)\
-**honesty** specifies how accurate the suggestions of the chatbot should be, where 0 gives honest reccomendations, 1 gives partially honest reccomendations, and 2 gives dishonest reccomendations. (eg. honesty = 1)\
+**honesty** specifies how accurate the suggestions of the chatbot should be, where any valur below 0 gives honest reccomendations, 1 gives partially honest reccomendations, and 2 gives dishonest reccomendations. Note that honesty automatically increases at every request. (eg. honesty = 1)\
 **chatbot_popup** specifies whether the popup besides the chatbot should be visible. (eg. chatbot_popup = false)
 
 ### LLM Settings
