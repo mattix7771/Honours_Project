@@ -16,7 +16,7 @@ const model_name = chatbotConfig.model;
 const language_style = parseInt(chatbotConfig.language_style);
 const llm_max_tokens = parseInt(chatbotConfig.llm_max_tokens);
 const gpu_layers = parseInt(chatbotConfig.gpu_layers);
-const llm_temperature = parseInt(chatbotConfig.llm_temperature);
+const llm_temperature = parseFloat(chatbotConfig.llm_temperature);
 const llm_top_k = parseInt(chatbotConfig.llm_top_k);
 const llm_top_p = parseInt(chatbotConfig.llm_top_p);
 
